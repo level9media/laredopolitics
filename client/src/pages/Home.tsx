@@ -259,10 +259,9 @@ type Language = keyof typeof copy;
 
 function EditorialMark() {
   return (
-    <div className="brand-mark" aria-hidden="true">
-      <span className="brand-mark-l">L</span>
-      <span className="brand-mark-nine">9</span>
-    </div>
+    <span className="brand-mark" aria-hidden="true">
+      <img src="/manus-storage/laredo-texas-logo_e7a4842a.png" alt="" />
+    </span>
   );
 }
 
