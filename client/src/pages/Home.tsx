@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import {
   ArrowDown,
   ArrowRight,
@@ -22,19 +22,22 @@ import {
   X,
 } from "lucide-react";
 import { toast } from "sonner";
+import Seo, { SITE_URL } from "@/components/Seo";
 
 const candidates = [
   {
+    slug: "poncho-casso",
     initial: "C",
     name: 'Alfonso “Poncho” Casso',
     ballot: "Poncho Casso",
     detail: {
-      es: "Laredoano de séptima generación, exconcejal y fundador de CIVIC. Su mensaje se concentra en el agua, el alivio de impuestos y la transparencia municipal.",
-      en: "A seventh-generation Laredoan, former council member and CIVIC founder. His message centers on water, property-tax relief and city transparency.",
+      es: "Exconcejal y empresario local. Su campaña de 2026 se concentra en rendición de cuentas, transparencia, seguridad del agua y comercio internacional.",
+      en: "Former council member and local businessman. His 2026 campaign centers on accountability, transparency, water security, and international trade.",
     },
     url: "https://cassoformayor.com/",
   },
   {
+    slug: "alyssa-cigarroa",
     initial: "C",
     name: "Alyssa Cigarroa",
     ballot: "Alyssa Cigarroa",
@@ -45,6 +48,7 @@ const candidates = [
     url: "https://www.cityoflaredo.com/government/mayor-city-council/district-8-cm-alyssa-cigarroa",
   },
   {
+    slug: "jd-gonzalez",
     initial: "G",
     name: "JD Gonzalez",
     ballot: "JD Gonzalez",
@@ -55,6 +59,18 @@ const candidates = [
     url: "https://jdformayor.com/",
   },
   {
+    slug: "jorge-garza",
+    initial: "G",
+    name: "Jorge A. Garza",
+    ballot: "Jorge A. Garza",
+    detail: {
+      es: "La Ciudad de Laredo lo incluye oficialmente en la contienda para alcalde de 2026. Hasta ahora hay poca información pública verificable sobre su experiencia y plataforma.",
+      en: "The City of Laredo officially lists him in the 2026 mayoral race. Limited verifiable public information about his experience and platform is currently available.",
+    },
+    url: "https://www.cityoflaredo.com/departments/elections/2026-candidates-information",
+  },
+  {
+    slug: "victor-trevino",
     initial: "T",
     name: "Dr. Victor D. Treviño",
     ballot: "Victor D. Trevino",
@@ -146,7 +162,7 @@ const copy = {
     seeAnalysis: "Ver el análisis",
     election: "Elección municipal",
     daysLabel: "La decisión es tuya",
-    ticker: "CUATRO CANDIDATOS",
+    ticker: "CINCO CANDIDATOS",
     ticker2: "UNA CIUDAD",
     ticker3: "TU VOTO",
     focusEyebrow: "La conversación que importa",
@@ -163,7 +179,7 @@ const copy = {
     candidatesEyebrow: "Elección 2026",
     candidatesTitle: "¿Quién quiere dirigir Laredo?",
     candidatesText:
-      "Los cuatro candidatos reciben el mismo espacio. El orden es alfabético, no una recomendación.",
+      "Los cinco candidatos reciben el mismo espacio y la misma estructura. Esta presentación no es una recomendación.",
     ballot: "EN LA BOLETA",
     incumbent: "ALCALDE ACTUAL",
     profile: "Ver perfil y fuentes",
@@ -223,7 +239,7 @@ const copy = {
     seeAnalysis: "Read the analysis",
     election: "Municipal election",
     daysLabel: "The decision is yours",
-    ticker: "FOUR CANDIDATES",
+    ticker: "FIVE CANDIDATES",
     ticker2: "ONE CITY",
     ticker3: "YOUR VOTE",
     focusEyebrow: "The conversation that matters",
@@ -240,7 +256,7 @@ const copy = {
     candidatesEyebrow: "Election 2026",
     candidatesTitle: "Who wants to lead Laredo?",
     candidatesText:
-      "All four candidates receive equal space. The order is alphabetical, not an endorsement.",
+      "All five candidates receive equal space and the same structure. This presentation is not an endorsement.",
     ballot: "ON THE BALLOT",
     incumbent: "INCUMBENT MAYOR",
     profile: "View profile & sources",
@@ -313,7 +329,13 @@ export default function Home() {
   });
   const t = copy[language];
 
-  const navTargets = ["#bueno-malo", "#candidatos", "#agenda", "#votar"];
+  useEffect(() => {
+    if (window.location.hash === "#advertise-form") {
+      window.requestAnimationFrame(() => document.getElementById("advertise-form")?.scrollIntoView({ block: "start" }));
+    }
+  }, []);
+
+  const navTargets = ["#bueno-malo", "/candidatos", "/calendario-electoral", "/votar"];
 
   const handleIssueVote = (issueNumber: string, vote: "up" | "down") => {
     const removingVote = issueVotes[issueNumber] === vote;
@@ -374,6 +396,13 @@ export default function Home() {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#f4f0e8] text-[#132a33]">
+      <Seo
+        title="Laredo Mayor 2026 | Candidatos, temas y cómo votar"
+        description="Guía independiente sobre la elección de alcalde de Laredo 2026: candidatos, Lo Bueno / Lo Malo, agua, impuestos, fechas y recursos para votar."
+        path="/"
+        keywords={["Laredo mayor 2026", "candidatos alcalde Laredo", "elecciones Laredo", "Laredo politics", "cómo votar Laredo"]}
+        schema={{ "@context": "https://schema.org", "@type": "WebSite", name: "Laredo Mayor", url: SITE_URL, inLanguage: ["es", "en"] }}
+      />
       <div className="bg-[#0d2732] text-[#dbe6e3]">
         <div className="container flex min-h-9 items-center justify-between py-2 text-[10px] font-bold uppercase tracking-[0.2em] sm:text-xs">
           <span className="flex items-center gap-2">
@@ -511,14 +540,14 @@ export default function Home() {
               </p>
               <div className="reveal reveal-delay-3 mt-9 flex flex-wrap items-center gap-4">
                 <a
-                  href="#candidatos"
+                  href="/candidatos"
                   data-umami-event="hero-candidates"
                   className="group flex items-center gap-3 bg-[#e75037] px-6 py-4 text-xs font-black uppercase tracking-[0.12em] text-white shadow-[5px_5px_0_#f0dfbd] transition duration-200 hover:-translate-y-1 hover:shadow-[7px_7px_0_#f0dfbd] active:scale-[0.97]"
                 >
                   {t.seeCandidates} <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-1" />
                 </a>
                 <a
-                  href="#bueno-malo"
+                  href="/temas"
                   data-umami-event="hero-analysis"
                   className="group flex items-center gap-2 border-b border-white/40 py-2 text-xs font-black uppercase tracking-[0.12em] text-white transition hover:border-[#f0dfbd] hover:text-[#f0dfbd]"
                 >
@@ -651,7 +680,7 @@ export default function Home() {
               <p className="max-w-xl border-l border-[#e75037] pl-5 text-base leading-7 text-[#b9c9c7] lg:justify-self-end">{t.candidatesText}</p>
             </div>
 
-            <div className="grid border-l border-t border-white/15 md:grid-cols-2 xl:grid-cols-4">
+            <div className="grid border-l border-t border-white/15 md:grid-cols-2 xl:grid-cols-5">
               {candidates.map((candidate, index) => (
                 <article
                   key={candidate.name}
@@ -674,9 +703,7 @@ export default function Home() {
                     <p className="mt-5 text-sm leading-6 text-[#b9c9c7]">{candidate.detail[language]}</p>
                   </div>
                   <a
-                    href={candidate.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href={`/candidatos/${candidate.slug}`}
                     data-umami-event={`candidate-${candidate.ballot.toLowerCase().replaceAll(" ", "-")}`}
                     className="mt-auto flex items-center justify-between border-t border-white/15 pt-5 text-[10px] font-black uppercase tracking-[0.14em] text-[#f0dfbd] transition hover:text-white"
                   >
@@ -696,7 +723,7 @@ export default function Home() {
                 <h2 className="mt-5 font-display text-5xl font-black leading-[0.94] tracking-[-0.05em] sm:text-6xl">{t.agendaTitle}</h2>
                 <p className="mt-6 max-w-md text-base leading-7 text-[#586a6d]">{t.agendaText}</p>
                 <a
-                  href="https://www.cityoflaredo.com/government/city-secretary/elections"
+                  href="https://www.cityoflaredo.com/departments/2026-general-elections"
                   target="_blank"
                   rel="noopener noreferrer"
                   data-umami-event="official-election-calendar"
@@ -736,8 +763,8 @@ export default function Home() {
               <div className="grid gap-3">
                 {[
                   [t.check, "https://teamrv-mvp.sos.texas.gov/MVP/mvp.do", BadgeCheck, "registration-check"],
-                  [t.find, "https://www.webbcountytx.gov/ElectionsAdministration/", MapPin, "voting-location"],
-                  [t.sample, "https://www.webbcountytx.gov/ElectionsAdministration/SampleBallots/default.aspx", Newspaper, "sample-ballot"],
+                  [t.find, "https://www.cityoflaredo.com/home/showdocument?id=24402&t=639239505286997868", MapPin, "voting-location"],
+                  [t.sample, "https://www.cityoflaredo.com/departments/2026-general-elections", Newspaper, "sample-ballot"],
                 ].map(([label, url, Icon, eventName], index) => {
                   const VoteIcon = Icon as typeof BadgeCheck;
                   return (
@@ -949,15 +976,18 @@ export default function Home() {
               <p className="mt-4 max-w-lg font-display text-xl italic text-[#d4dfdc]">{t.footerLine}</p>
             </div>
             <div className="flex flex-wrap gap-x-6 gap-y-3 text-[9px] font-black uppercase tracking-[0.15em]">
-              <a href="#bueno-malo" className="hover:text-white">{t.nav[0]}</a>
-              <a href="#candidatos" className="hover:text-white">{t.nav[1]}</a>
-              <a href="#agenda" className="hover:text-white">{t.nav[2]}</a>
+              <a href="/temas" className="hover:text-white">{t.nav[0]}</a>
+              <a href="/candidatos" className="hover:text-white">{t.nav[1]}</a>
+              <a href="/calendario-electoral" className="hover:text-white">{t.nav[2]}</a>
               <a href="#anunciate" className="hover:text-white">Anúnciate</a>
             </div>
           </div>
           <div className="mt-7 flex flex-col gap-4 text-[11px] leading-5 md:flex-row md:items-start md:justify-between">
             <p className="max-w-3xl">{t.disclaimer}</p>
-            <p className="shrink-0 font-mono text-[9px] uppercase tracking-widest">{t.updated}</p>
+            <div className="shrink-0 text-left md:text-right">
+              <p className="font-mono text-[9px] uppercase tracking-widest">{t.updated}</p>
+              <p className="mt-2 text-[9px]">Sitio creado y administrado por <a href="https://levelninemedia.com/" target="_blank" rel="noopener noreferrer" className="font-bold text-white underline decoration-[#e75037] underline-offset-4">Level Nine Media</a></p>
+            </div>
           </div>
         </div>
       </footer>

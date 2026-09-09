@@ -1,20 +1,54 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
+import { useEffect } from "react";
+import { Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
+import {
+  CandidateComparison,
+  CandidateHub,
+  CandidatePage,
+  ElectionOverview,
+  IssueHub,
+  IssuePage,
+  MissingResource,
+  StaticResourcePage,
+  VotingHub,
+  VotingResourcePage,
+} from "./pages/ResourcePages";
 
+function ScrollToTop() {
+  const [location] = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [location]);
+  return null;
+}
 
 function Router() {
   return (
-    <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
-      <Route component={NotFound} />
-    </Switch>
+    <>
+      <ScrollToTop />
+      <Switch>
+        <Route path={"/"} component={Home} />
+        <Route path="/eleccion-alcalde-laredo-2026" component={ElectionOverview} />
+        <Route path="/candidatos" component={CandidateHub} />
+        <Route path="/comparar-candidatos" component={CandidateComparison} />
+        <Route path="/candidatos/:slug">{(params) => <CandidatePage slug={params.slug} />}</Route>
+        <Route path="/temas" component={IssueHub} />
+        <Route path="/temas/:slug">{(params) => <IssuePage slug={params.slug} />}</Route>
+        <Route path="/votar" component={VotingHub} />
+        <Route path="/votar/:slug">{(params) => <VotingResourcePage slug={params.slug} />}</Route>
+        <Route path="/calendario-electoral">{() => <StaticResourcePage kind="calendar" />}</Route>
+        <Route path="/finanzas-de-campana">{() => <StaticResourcePage kind="finance" />}</Route>
+        <Route path="/verificacion-de-datos">{() => <StaticResourcePage kind="facts" />}</Route>
+        <Route path="/metodologia">{() => <StaticResourcePage kind="methodology" />}</Route>
+        <Route path={"/404"} component={MissingResource} />
+        {/* Final fallback route */}
+        <Route component={MissingResource} />
+      </Switch>
+    </>
   );
 }
 
