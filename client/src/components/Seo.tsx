@@ -15,6 +15,18 @@ type SeoProps = {
   schema?: Record<string, unknown> | Array<Record<string, unknown>>;
 };
 
+type PrerenderSeo = {
+  fullTitle: string;
+  description: string;
+  canonical: string;
+  socialImage: string;
+  language: "en" | "es";
+  alternateUrl: string;
+  type: "website" | "article";
+  keywords: string[];
+  schema?: Record<string, unknown> | Array<Record<string, unknown>>;
+};
+
 function upsertMeta(selector: string, attribute: "name" | "property", value: string, content: string) {
   let element = document.head.querySelector<HTMLMetaElement>(selector);
   if (!element) {
@@ -26,11 +38,14 @@ function upsertMeta(selector: string, attribute: "name" | "property", value: str
 }
 
 export default function Seo({ title, description, path, language = "en", alternatePath, image, type = "website", keywords = [], schema }: SeoProps) {
+  const fullTitle = title.includes("Laredo Politics") ? title : `${title} | Laredo Politics`;
+  const canonical = `${SITE_URL}${path === "/" ? "" : path}`;
+  const socialImage = image ? (image.startsWith("http") ? image : `${SITE_URL}${image}`) : `${SITE_URL}${DEFAULT_IMAGE}`;
+  const resolvedAlternatePath = alternatePath ?? (language === "es" ? (path.replace(/^\/es/, "") || "/") : `/es${path === "/" ? "" : path}`);
+  const alternateUrl = `${SITE_URL}${resolvedAlternatePath}`;
+  const prerenderSeo: PrerenderSeo = { fullTitle, description, canonical, socialImage, language, alternateUrl, type, keywords, schema };
+
   useEffect(() => {
-    const fullTitle = title.includes("Laredo Politics") ? title : `${title} | Laredo Politics`;
-    const canonical = `${SITE_URL}${path === "/" ? "" : path}`;
-    const socialImage = image ? (image.startsWith("http") ? image : `${SITE_URL}${image}`) : `${SITE_URL}${DEFAULT_IMAGE}`;
-    const resolvedAlternatePath = alternatePath ?? (language === "es" ? (path.replace(/^\/es/, "") || "/") : `/es${path === "/" ? "" : path}`);
     document.title = fullTitle;
     document.documentElement.lang = language;
 
@@ -55,21 +70,18 @@ export default function Seo({ title, description, path, language = "en", alterna
     canonicalLink.href = canonical;
 
     document.querySelectorAll('link[data-laredo-hreflang="true"]').forEach((element) => element.remove());
-    if (resolvedAlternatePath) {
-      const alternates = [
-        { hreflang: language, href: canonical },
-        { hreflang: language === "en" ? "es" : "en", href: `${SITE_URL}${resolvedAlternatePath}` },
-        { hreflang: "x-default", href: SITE_URL },
-      ];
-      alternates.forEach((alternate) => {
-        const link = document.createElement("link");
-        link.rel = "alternate";
-        link.hreflang = alternate.hreflang;
-        link.href = alternate.href;
-        link.dataset.laredoHreflang = "true";
-        document.head.appendChild(link);
-      });
-    }
+    [
+      { hreflang: language, href: canonical },
+      { hreflang: language === "en" ? "es" : "en", href: alternateUrl },
+      { hreflang: "x-default", href: SITE_URL },
+    ].forEach((alternate) => {
+      const link = document.createElement("link");
+      link.rel = "alternate";
+      link.hreflang = alternate.hreflang;
+      link.href = alternate.href;
+      link.dataset.laredoHreflang = "true";
+      document.head.appendChild(link);
+    });
 
     const existing = document.getElementById("page-json-ld");
     existing?.remove();
@@ -85,9 +97,9 @@ export default function Seo({ title, description, path, language = "en", alterna
       document.getElementById("page-json-ld")?.remove();
       document.querySelectorAll('link[data-laredo-hreflang="true"]').forEach((element) => element.remove());
     };
-  }, [alternatePath, description, image, keywords, language, path, schema, title, type]);
+  }, [alternateUrl, canonical, description, fullTitle, keywords, language, schema, socialImage, type]);
 
-  return null;
+  return <script type="application/json" data-prerender-seo="true" suppressHydrationWarning dangerouslySetInnerHTML={{ __html: JSON.stringify(prerenderSeo).replaceAll("<", "\\u003c") }} />;
 }
 
 export { SITE_URL };

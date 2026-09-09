@@ -3,9 +3,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { lazy, Suspense, useEffect } from "react";
 import { Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
+import SiteAnalytics from "./components/SiteAnalytics";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
 
+const Home = lazy(() => import("./pages/Home"));
 const CandidateComparison = lazy(() => import("./pages/ResourcePages").then((module) => ({ default: module.CandidateComparison })));
 const CandidateHub = lazy(() => import("./pages/ResourcePages").then((module) => ({ default: module.CandidateHub })));
 const CandidatePage = lazy(() => import("./pages/ResourcePages").then((module) => ({ default: module.CandidatePage })));
@@ -26,6 +27,10 @@ const EnglishStaticResourcePage = lazy(() => import("./pages/ResourcePagesEnglis
 const EnglishVotingHub = lazy(() => import("./pages/ResourcePagesEnglish").then((module) => ({ default: module.EnglishVotingHub })));
 const EnglishVotingResourcePage = lazy(() => import("./pages/ResourcePagesEnglish").then((module) => ({ default: module.EnglishVotingResourcePage })));
 const LocalRacePage = lazy(() => import("./pages/LocalRaces").then((module) => ({ default: module.LocalRacePage })));
+const LocalCandidateProfilePage = lazy(() => import("./pages/LocalCandidateProfiles"));
+const CampaignFinanceDashboard = lazy(() => import("./pages/CampaignFinanceDashboard"));
+const WhereToVote = lazy(() => import("./pages/WhereToVote"));
+const Advertise = lazy(() => import("./pages/Advertise"));
 
 function ScrollToTop() {
   const [location] = useLocation();
@@ -42,6 +47,7 @@ function Router() {
       <Switch>
         <Route path="/">{() => <Home defaultLanguage="en" />}</Route>
         <Route path="/es">{() => <Home defaultLanguage="es" />}</Route>
+        <Route path="/election-2026/candidates/:slug">{(params) => <LocalCandidateProfilePage slug={params.slug} language="en" />}</Route>
         <Route path="/election-2026/:slug">{(params) => <LocalRacePage slug={params.slug} language="en" />}</Route>
         <Route path="/election-2026" component={EnglishElectionOverview} />
         <Route path="/eleccion-alcalde-laredo-2026/:slug">{(params) => <LocalRacePage slug={params.slug} language="en" />}</Route>
@@ -54,9 +60,13 @@ function Router() {
         <Route path="/votar" component={EnglishVotingHub} />
         <Route path="/votar/:slug">{(params) => <EnglishVotingResourcePage slug={params.slug} />}</Route>
         <Route path="/calendario-electoral">{() => <EnglishStaticResourcePage kind="calendar" />}</Route>
-        <Route path="/finanzas-de-campana">{() => <EnglishStaticResourcePage kind="finance" />}</Route>
+        <Route path="/campaign-finance">{() => <CampaignFinanceDashboard language="en" />}</Route>
+        <Route path="/finanzas-de-campana">{() => <CampaignFinanceDashboard language="en" />}</Route>
+        <Route path="/where-to-vote">{() => <WhereToVote language="en" />}</Route>
+        <Route path="/advertise">{() => <Advertise language="en" />}</Route>
         <Route path="/verificacion-de-datos">{() => <EnglishStaticResourcePage kind="facts" />}</Route>
         <Route path="/metodologia">{() => <EnglishStaticResourcePage kind="methodology" />}</Route>
+        <Route path="/es/elecciones-2026/candidatos/:slug">{(params) => <LocalCandidateProfilePage slug={params.slug} language="es" />}</Route>
         <Route path="/es/elecciones-2026/:slug">{(params) => <LocalRacePage slug={params.slug} language="es" />}</Route>
         <Route path="/es/elecciones-2026" component={ElectionOverview} />
         <Route path="/es/eleccion-alcalde-laredo-2026/:slug">{(params) => <LocalRacePage slug={params.slug} language="es" />}</Route>
@@ -69,7 +79,9 @@ function Router() {
         <Route path="/es/votar" component={VotingHub} />
         <Route path="/es/votar/:slug">{(params) => <VotingResourcePage slug={params.slug} />}</Route>
         <Route path="/es/calendario-electoral">{() => <StaticResourcePage kind="calendar" />}</Route>
-        <Route path="/es/finanzas-de-campana">{() => <StaticResourcePage kind="finance" />}</Route>
+        <Route path="/es/finanzas-de-campana">{() => <CampaignFinanceDashboard language="es" />}</Route>
+        <Route path="/es/donde-votar">{() => <WhereToVote language="es" />}</Route>
+        <Route path="/es/anunciate">{() => <Advertise language="es" />}</Route>
         <Route path="/es/verificacion-de-datos">{() => <StaticResourcePage kind="facts" />}</Route>
         <Route path="/es/metodologia">{() => <StaticResourcePage kind="methodology" />}</Route>
         <Route path={"/404"} component={EnglishMissingResource} />
@@ -93,6 +105,7 @@ function App() {
         // switchable
       >
         <TooltipProvider>
+          <SiteAnalytics />
           <Toaster />
           <Suspense fallback={<div className="grid min-h-[45vh] place-items-center bg-[#f4f0e8] font-display text-xl font-black text-[#102b36]">Loading Laredo Politics…</div>}>
             <Router />

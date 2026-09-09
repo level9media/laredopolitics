@@ -160,7 +160,7 @@ const dates = [
 
 const copy = {
   es: {
-    nav: ["Lo Bueno / Lo Malo", "Elección 2026", "Alcaldía", "Cómo votar"],
+    nav: ["Lo Bueno / Lo Malo", "Elección 2026", "Alcaldía", "Dónde votar"],
     independent: "Periodismo cívico independiente",
     heroEyebrow: "Elección municipal · 3 de noviembre de 2026",
     heroTitleA: "La política",
@@ -237,7 +237,7 @@ const copy = {
     updated: "Actualizado en septiembre de 2026",
   },
   en: {
-    nav: ["The Good / The Bad", "Election 2026", "Mayor", "How to vote"],
+    nav: ["The Good / The Bad", "Election 2026", "Mayor", "Where to vote"],
     independent: "Independent civic journalism",
     heroEyebrow: "Municipal election · November 3, 2026",
     heroTitleA: "The politics",
@@ -347,7 +347,7 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
   }, []);
 
   const routePrefix = language === "es" ? "/es" : "";
-  const navTargets = ["#bueno-malo", language === "es" ? "/es/elecciones-2026" : "/election-2026", `${routePrefix}/candidatos`, `${routePrefix}/votar`];
+  const navTargets = ["#bueno-malo", language === "es" ? "/es/elecciones-2026" : "/election-2026", `${routePrefix}/candidatos`, language === "es" ? "/es/donde-votar" : "/where-to-vote"];
 
   const switchLanguage = (nextLanguage: Language) => {
     if (nextLanguage === language) return;
@@ -501,7 +501,7 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
               </button>
             </div>
             <a
-              href="#votar"
+              href={language === "es" ? "/es/donde-votar" : "/where-to-vote"}
               className="hidden items-center gap-2 bg-[#e75037] px-4 py-3 text-[10px] font-black uppercase tracking-[0.14em] text-white shadow-[4px_4px_0_#102b36] transition duration-200 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_#102b36] active:scale-[0.97] sm:flex"
             >
               <Vote className="h-4 w-4" /> {language === "en" ? "Vote Nov. 3" : "Vota Nov. 3"}
@@ -974,7 +974,9 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
               <a href={`${routePrefix}/temas`} className="hover:text-white">{t.nav[0]}</a>
               <a href={language === "es" ? "/es/elecciones-2026" : "/election-2026"} className="hover:text-white">{t.nav[1]}</a>
               <a href={`${routePrefix}/candidatos`} className="hover:text-white">{t.nav[2]}</a>
-              <a href="#anunciate" className="hover:text-white">{language === "en" ? "Advertise" : "Anúnciate"}</a>
+              <a href={language === "es" ? "/es/finanzas-de-campana" : "/campaign-finance"} className="hover:text-white">{language === "en" ? "Campaign finance" : "Finanzas de campaña"}</a>
+              <a href={language === "es" ? "/es/donde-votar" : "/where-to-vote"} className="hover:text-white">{t.nav[3]}</a>
+              <a href={language === "es" ? "/es/anunciate" : "/advertise"} className="text-[#f0dfbd] hover:text-white">{language === "en" ? "Advertise with us" : "Anúnciate con nosotros"}</a>
             </div>
           </div>
           <div className="mt-7 flex flex-col gap-4 text-[11px] leading-5 md:flex-row md:items-start md:justify-between">

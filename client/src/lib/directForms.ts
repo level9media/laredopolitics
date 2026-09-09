@@ -1,6 +1,6 @@
 const FORM_ENDPOINT = "https://formsubmit.co/ajax/robertgray@gmail.com";
 
-export type DirectFormType = "advertiser_inquiry" | "newsletter_signup" | "site_update_signup" | "correction_submission";
+export type DirectFormType = "advertiser_inquiry" | "newsletter_signup" | "site_update_signup" | "correction_submission" | "candidate_questionnaire";
 
 type FormPayload = Record<string, string>;
 

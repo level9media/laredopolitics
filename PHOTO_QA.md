@@ -10,3 +10,12 @@ All third-party or campaign-supplied portraits require retained source credit an
 
 The optimized 960 × 720 WebP crops for Victor Treviño and Poncho Casso were visually verified. Both preserve full facial framing without distortion; Poncho's custom right-biased crop corrects the original landscape composition.
 The optimized Alyssa Cigarroa and JD Gonzalez WebP crops were also visually verified. Alyssa's environmental portrait retains useful Laredo context, while JD's crop preserves the formal head-and-shoulders composition. All four outputs are consistently sized at 960 × 720 and remain under 65 KB each.
+
+## District and judicial candidate research images
+
+- **Melissa R Cigarroa:** the candidate-site URL resolved to a square campaign wordmark and civic crest rather than a portrait. It will not be presented as a candidate headshot.
+- **D. Tyler King:** the candidate-site image is a 500 × 400 event photograph with King centered and clearly identifiable. A careful 4:3 crop can preserve his face and upper body while retaining context.
+- **Ubaldo “Baldo” Granados Jr.:** the candidate-controlled image is a high-resolution formal studio portrait with clear head-and-shoulders framing and a neutral background. It supports a consistent 4:3 profile crop.
+- **Nathan Henry Chu:** the candidate-controlled Linktree image is a clean square formal portrait with ample neutral background and can be cropped safely to 4:3.
+The optimized 960 × 720 WebP crops for D. Tyler King and Ubaldo “Baldo” Granados Jr. were visually verified. Both keep the candidate clearly identifiable, avoid distortion, and remain under 40 KB for fast profile-page loading.
+Nathan Henry Chu’s optimized 960 × 720 WebP crop was also verified. It preserves the complete formal head-and-torso composition against a neutral background and remains under 40 KB.

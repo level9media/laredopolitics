@@ -29,7 +29,7 @@
   <url><loc>https://laredopolitics.com/votar/voto-por-correo</loc><lastmod>2026-09-09</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://laredopolitics.com/votar/identificacion-para-votar</loc><lastmod>2026-09-09</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://laredopolitics.com/calendario-electoral</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://laredopolitics.com/finanzas-de-campana</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/campaign-finance</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://laredopolitics.com/verificacion-de-datos</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://laredopolitics.com/metodologia</loc><lastmod>2026-09-09</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://laredopolitics.com/es</loc><lastmod>2026-09-09</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
@@ -75,4 +75,30 @@
   <url><loc>https://laredopolitics.com/election-2026/municipal-court-judge</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://laredopolitics.com/es/elecciones-2026/municipal-court-judge</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 
+  <url><loc>https://laredopolitics.com/where-to-vote</loc><lastmod>2026-09-09</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://laredopolitics.com/advertise</loc><lastmod>2026-09-09</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://laredopolitics.com/es/donde-votar</loc><lastmod>2026-09-09</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://laredopolitics.com/es/anunciate</loc><lastmod>2026-09-09</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://laredopolitics.com/election-2026/candidates/lupe-de-leon-jr</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/es/elecciones-2026/candidatos/lupe-de-leon-jr</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/election-2026/candidates/gilbert-gonzalez</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/es/elecciones-2026/candidatos/gilbert-gonzalez</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/election-2026/candidates/ricardo-rangel-jr</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/es/elecciones-2026/candidatos/ricardo-rangel-jr</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/election-2026/candidates/daisy-campos-rodriguez</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/es/elecciones-2026/candidatos/daisy-campos-rodriguez</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/election-2026/candidates/melissa-cigarroa</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/es/elecciones-2026/candidatos/melissa-cigarroa</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/election-2026/candidates/michelle-winterroth</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/es/elecciones-2026/candidatos/michelle-winterroth</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/election-2026/candidates/clarissa-cardenas</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/es/elecciones-2026/candidatos/clarissa-cardenas</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/election-2026/candidates/d-tyler-king</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/es/elecciones-2026/candidatos/d-tyler-king</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/election-2026/candidates/ubaldo-granados-jr</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/es/elecciones-2026/candidatos/ubaldo-granados-jr</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/election-2026/candidates/nathan-henry-chu</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/es/elecciones-2026/candidatos/nathan-henry-chu</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/election-2026/candidates/rudy-morales-iii</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://laredopolitics.com/es/elecciones-2026/candidatos/rudy-morales-iii</loc><lastmod>2026-09-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 </urlset>

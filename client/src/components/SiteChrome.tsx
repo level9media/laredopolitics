@@ -13,15 +13,15 @@ const chromeCopy = {
     tagline: "The politics of our city",
     top: "Laredo, Texas · 2026 Election",
     standard: "Independent · Nonpartisan",
-    links: [["Election 2026", "/election-2026"], ["Mayor", "/candidatos"], ["Mayor compare", "/comparar-candidatos"], ["Issues", "/temas"], ["How to vote", "/votar"]],
-    plan: "Voting plan",
+    links: [["Election 2026", "/election-2026"], ["Mayor", "/candidatos"], ["Issues", "/temas"], ["Finance", "/campaign-finance"], ["Where to vote", "/where-to-vote"]],
+    plan: "Find where to vote",
     home: "Home",
     brief: "The Laredo Brief",
     briefLine: "Once a week. Only what matters.",
     subscribe: "Subscribe",
     footerLine: "Clear information for a city deciding its future.",
-    footerLinks: [["Election 2026", "/election-2026"], ["Mayor", "/candidatos"], ["Mayor compare", "/comparar-candidatos"], ["Issues", "/temas"], ["How to vote", "/votar"], ["Methodology", "/metodologia"]],
-    advertise: "Advertise",
+    footerLinks: [["Election 2026", "/election-2026"], ["Mayor", "/candidatos"], ["Mayor compare", "/comparar-candidatos"], ["Issues", "/temas"], ["Campaign finance", "/campaign-finance"], ["Where to vote", "/where-to-vote"], ["How to vote", "/votar"], ["Methodology", "/metodologia"]],
+    advertise: "Advertise with us",
     disclaimer: "Independent, nonpartisan resource. We do not endorse candidates. Verify voting instructions with official election authorities.",
     credit: "Site created and managed by",
     sources: "Sources and verification",
@@ -35,15 +35,15 @@ const chromeCopy = {
     tagline: "La política de nuestra ciudad",
     top: "Laredo, Texas · Elección 2026",
     standard: "Independiente · No partidista",
-    links: [["Elección 2026", "/es/elecciones-2026"], ["Alcaldía", "/es/candidatos"], ["Comparar alcalde", "/es/comparar-candidatos"], ["Temas", "/es/temas"], ["Cómo votar", "/es/votar"]],
-    plan: "Plan para votar",
+    links: [["Elección 2026", "/es/elecciones-2026"], ["Alcaldía", "/es/candidatos"], ["Temas", "/es/temas"], ["Finanzas", "/es/finanzas-de-campana"], ["Dónde votar", "/es/donde-votar"]],
+    plan: "Encuentra dónde votar",
     home: "Inicio",
     brief: "El Brief de Laredo",
     briefLine: "Una vez por semana. Sólo lo que importa.",
     subscribe: "Suscríbeme",
     footerLine: "Información clara para una ciudad que decide su futuro.",
-    footerLinks: [["Elección 2026", "/es/elecciones-2026"], ["Alcaldía", "/es/candidatos"], ["Comparar alcalde", "/es/comparar-candidatos"], ["Temas", "/es/temas"], ["Cómo votar", "/es/votar"], ["Metodología", "/es/metodologia"]],
-    advertise: "Anúnciate",
+    footerLinks: [["Elección 2026", "/es/elecciones-2026"], ["Alcaldía", "/es/candidatos"], ["Comparar alcalde", "/es/comparar-candidatos"], ["Temas", "/es/temas"], ["Finanzas de campaña", "/es/finanzas-de-campana"], ["Dónde votar", "/es/donde-votar"], ["Cómo votar", "/es/votar"], ["Metodología", "/es/metodologia"]],
+    advertise: "Anúnciate con nosotros",
     disclaimer: "Recurso independiente y no partidista. No respaldamos candidatos. Verifica instrucciones electorales con las autoridades oficiales.",
     credit: "Sitio creado y administrado por",
     sources: "Fuentes y verificación",
@@ -73,12 +73,28 @@ export function SiteHeader({ language = "en" }: { language?: Language }) {
   const t = chromeCopy[language];
   const currentPath = typeof window === "undefined" ? (language === "en" ? "/" : "/es") : window.location.pathname;
   const languageHref = language === "en"
-    ? currentPath.startsWith("/election-2026")
-      ? `/es/elecciones-2026${currentPath.slice("/election-2026".length)}`
-      : `/es${currentPath === "/" ? "" : currentPath}`
-    : currentPath.startsWith("/es/elecciones-2026")
-      ? `/election-2026${currentPath.slice("/es/elecciones-2026".length)}`
-      : (currentPath.replace(/^\/es/, "") || "/");
+    ? currentPath.startsWith("/election-2026/candidates/")
+      ? currentPath.replace("/election-2026/candidates/", "/es/elecciones-2026/candidatos/")
+      : currentPath === "/campaign-finance" || currentPath === "/finanzas-de-campana"
+        ? "/es/finanzas-de-campana"
+        : currentPath === "/where-to-vote"
+          ? "/es/donde-votar"
+          : currentPath === "/advertise"
+            ? "/es/anunciate"
+            : currentPath.startsWith("/election-2026")
+              ? `/es/elecciones-2026${currentPath.slice("/election-2026".length)}`
+              : `/es${currentPath === "/" ? "" : currentPath}`
+    : currentPath.startsWith("/es/elecciones-2026/candidatos/")
+      ? currentPath.replace("/es/elecciones-2026/candidatos/", "/election-2026/candidates/")
+      : currentPath === "/es/finanzas-de-campana"
+        ? "/campaign-finance"
+        : currentPath === "/es/donde-votar"
+          ? "/where-to-vote"
+          : currentPath === "/es/anunciate"
+            ? "/advertise"
+            : currentPath.startsWith("/es/elecciones-2026")
+              ? `/election-2026${currentPath.slice("/es/elecciones-2026".length)}`
+              : (currentPath.replace(/^\/es/, "") || "/");
   const languageLabel = language === "en" ? "ES" : "EN";
   const homeHref = language === "en" ? "/" : "/es";
 
@@ -91,7 +107,7 @@ export function SiteHeader({ language = "en" }: { language?: Language }) {
           <nav className="hidden items-center gap-6 xl:flex" aria-label="Resource navigation">{t.links.map(([label, href]) => <Link key={href} href={href} data-umami-event={`resource-nav-${href.replaceAll("/", "") || "home"}`} className="nav-link text-[10px] font-extrabold uppercase tracking-[0.08em] text-[#243b43]">{label}</Link>)}</nav>
           <div className="flex items-center gap-2">
             <Link href={languageHref} className="grid h-10 min-w-10 place-items-center rounded-full border border-[#102b36]/15 bg-white px-3 text-[9px] font-black tracking-[0.12em] text-[#102b36]" aria-label={language === "en" ? "Ver sitio en español" : "View site in English"}>{languageLabel}</Link>
-            <Link href={language === "en" ? "/votar" : "/es/votar"} className="hidden items-center gap-2 bg-[#e75037] px-4 py-3 text-[9px] font-black uppercase tracking-[0.13em] text-white shadow-[4px_4px_0_#102b36] active:scale-[0.97] sm:flex"><Vote className="h-4 w-4" /> {t.plan}</Link>
+            <Link href={language === "en" ? "/where-to-vote" : "/es/donde-votar"} className="hidden items-center gap-2 bg-[#e75037] px-4 py-3 text-[9px] font-black uppercase tracking-[0.13em] text-white shadow-[4px_4px_0_#102b36] active:scale-[0.97] sm:flex"><Vote className="h-4 w-4" /> {t.plan}</Link>
             <button type="button" onClick={() => setOpen((value) => !value)} className="grid h-11 w-11 place-items-center border border-[#102b36]/15 bg-white xl:hidden" aria-expanded={open} aria-label="Open menu">{open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</button>
           </div>
         </div>
@@ -141,7 +157,7 @@ export function NewsletterBar({ language = "en" }: { language?: Language }) {
 
 export function SiteFooter({ language = "en" }: { language?: Language }) {
   const t = chromeCopy[language];
-  return <footer className="bg-[#071b23] py-12 text-[#9eb3b0]"><div className="container"><div className="grid gap-9 border-b border-white/10 pb-9 md:grid-cols-[1fr_auto] md:items-end"><div><Link href={language === "en" ? "/" : "/es"} className="inline-flex"><Logo inverted language={language} /></Link><p className="mt-4 max-w-xl font-display text-lg italic text-[#d4dfdc]">{t.footerLine}</p></div><div className="grid grid-cols-2 gap-x-7 gap-y-3 text-[9px] font-black uppercase tracking-[0.13em] sm:grid-cols-3">{t.footerLinks.map(([label, href]) => <Link key={href} href={href} className="hover:text-white">{label}</Link>)}<a href={`${language === "en" ? "/" : "/es"}#advertise-form`} className="hover:text-white">{t.advertise}</a></div></div><div className="mt-7 flex flex-col gap-4 text-[10px] leading-5 md:flex-row md:justify-between"><p className="max-w-3xl">{t.disclaimer}</p><p className="shrink-0">{t.credit} <a href="https://levelninemedia.com/" target="_blank" rel="noopener noreferrer" className="font-bold text-white underline decoration-[#e75037] underline-offset-4">Level Nine Media</a></p></div></div></footer>;
+  return <footer className="bg-[#071b23] py-12 text-[#9eb3b0]"><div className="container"><div className="grid gap-9 border-b border-white/10 pb-9 md:grid-cols-[1fr_auto] md:items-end"><div><Link href={language === "en" ? "/" : "/es"} className="inline-flex"><Logo inverted language={language} /></Link><p className="mt-4 max-w-xl font-display text-lg italic text-[#d4dfdc]">{t.footerLine}</p></div><div className="grid grid-cols-2 gap-x-7 gap-y-3 text-[9px] font-black uppercase tracking-[0.13em] sm:grid-cols-3">{t.footerLinks.map(([label, href]) => <Link key={href} href={href} className="hover:text-white">{label}</Link>)}<Link href={language === "en" ? "/advertise" : "/es/anunciate"} className="text-[#f0dfbd] hover:text-white">{t.advertise}</Link></div></div><div className="mt-7 flex flex-col gap-4 text-[10px] leading-5 md:flex-row md:justify-between"><p className="max-w-3xl">{t.disclaimer}</p><p className="shrink-0">{t.credit} <a href="https://levelninemedia.com/" target="_blank" rel="noopener noreferrer" className="font-bold text-white underline decoration-[#e75037] underline-offset-4">Level Nine Media</a></p></div></div></footer>;
 }
 
 export function PageShell({ children, language = "en" }: { children: React.ReactNode; language?: Language }) {

@@ -18,6 +18,7 @@ import {
   officialCandidateSourceUrl,
   type LocalRace,
 } from "@/data/localRaces";
+import { candidateProfileHrefForName } from "@/data/localCandidateProfiles";
 
 type Language = "en" | "es";
 
@@ -39,6 +40,7 @@ const copy = {
     treasurer: "Campaign treasurer",
     treasurerFiling: "Open treasurer filing",
     application: "Open ballot application",
+    profile: "Profile and questionnaire",
     fairness: "The City table controls the candidate list",
     fairnessText:
       "Names, ballot order, legal names, campaign treasurers, and application links on this page come from the City of Laredo's designated 2026 candidate page. Editorial profiles and analysis are kept separate from those official filing facts.",
@@ -77,6 +79,7 @@ const copy = {
     treasurer: "Tesorero de campaña",
     treasurerFiling: "Abrir registro del tesorero",
     application: "Abrir solicitud para la boleta",
+    profile: "Perfil y cuestionario",
     fairness: "La tabla municipal controla la lista",
     fairnessText:
       "Los nombres, el orden, los nombres legales, los tesoreros y los enlaces de solicitudes provienen de la página municipal designada. Los perfiles y el análisis editorial se mantienen separados de esos datos oficiales.",
@@ -220,6 +223,7 @@ export function LocalRacePage({ slug, language = "en" }: { slug: string; languag
                         <dd className="mt-2 font-display text-lg font-black">{candidate.campaignTreasurer}</dd>
                       </dl>
                       <div className="mt-6 grid gap-2">
+                        <Link href={candidateProfileHrefForName(candidate.fullName, language)} className="flex min-h-11 items-center justify-between bg-[#e75037] px-4 text-[8px] font-black uppercase tracking-[0.12em] text-white">{t.profile}<ArrowRight className="h-4 w-4" /></Link>
                         <a href={candidate.treasurerUrl} target="_blank" rel="noopener noreferrer" className="flex min-h-11 items-center justify-between bg-[#102b36] px-4 text-[8px] font-black uppercase tracking-[0.12em] text-white">{t.treasurerFiling}<UserRoundCheck className="h-4 w-4 text-[#f0dfbd]" /></a>
                         <a href={candidate.applicationUrl} target="_blank" rel="noopener noreferrer" className="flex min-h-11 items-center justify-between border border-[#102b36]/20 px-4 text-[8px] font-black uppercase tracking-[0.12em] text-[#102b36]">{t.application}<FileText className="h-4 w-4 text-[#e75037]" /></a>
                       </div>

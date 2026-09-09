@@ -1,4 +1,5 @@
 import { ArrowUpRight, BarChart3, CalendarDays, FileCheck2, MapPinned, Vote } from "lucide-react";
+import { Link } from "wouter";
 import { officialCandidateSourceUrl, officialElectionResources, politicalForums } from "@/data/localRaces";
 
 type Language = "en" | "es";
@@ -20,6 +21,8 @@ const copy = {
     precincts: "Precinct maps",
     precinctsText: "View the official precinct-map document.",
     source: "Open designated City source",
+    dashboard: "Compare campaign finance",
+    where: "Find where to vote",
     october: "October",
   },
   es: {
@@ -38,6 +41,8 @@ const copy = {
     precincts: "Mapas de precintos",
     precinctsText: "Consulta el documento oficial de precintos.",
     source: "Abrir la fuente municipal designada",
+    dashboard: "Comparar finanzas de campaña",
+    where: "Encontrar dónde votar",
     october: "Octubre",
   },
 } as const;
@@ -99,6 +104,7 @@ export default function OfficialElectionResources({ language = "en" }: { languag
             })}
           </div>
         </div>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2"><Link href={language === "en" ? "/campaign-finance" : "/es/finanzas-de-campana"} className="flex min-h-14 items-center justify-between bg-[#e75037] px-5 text-[9px] font-black uppercase tracking-[0.13em] text-white">{t.dashboard}<BarChart3 className="h-5 w-5" /></Link><Link href={language === "en" ? "/where-to-vote" : "/es/donde-votar"} className="flex min-h-14 items-center justify-between bg-[#102b36] px-5 text-[9px] font-black uppercase tracking-[0.13em] text-white">{t.where}<MapPinned className="h-5 w-5 text-[#f0dfbd]" /></Link></div>
       </div>
     </section>
   );
