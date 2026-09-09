@@ -65,3 +65,11 @@ All `mailto:` behavior was removed. Advertiser inquiries, The Laredo Brief signu
 The City of Laredo's official 2026 General Election page confirms that only City Council Districts **1, 2, 3 and 6** are on the November 3, 2026 general-election ballot. The six publisher-supplied images correspond to Mayor, Districts 1/2/3/6, and Municipal Court Judge Position 1; no District 4/5/7/8 ballot-drawing boards were supplied because those four districts are not listed in this election cycle.
 
 The top district directory now includes **all eight districts**. Districts 1, 2, 3 and 6 display their 2026 candidates. Districts 4, 5, 7 and 8 display the current council member and a clear **Not on the 2026 general-election ballot** label. Desktop and mobile screenshots passed, and a live rendered-text check confirmed Districts 1–8 plus exactly four non-election labels.
+
+## City of Laredo 2026 Candidates Information as source of truth
+
+The publisher designated `https://www.cityoflaredo.com/departments/elections/2026-candidates-information` as the controlling source for 2026 candidate names, ballot order, full legal names, campaign treasurers, and ballot applications. The site now matches that table exactly for Mayor, Districts 1, 2, 3 and 6, and Municipal Court Judge Position 1.
+
+The current City table lists only D. Tyler King and Ubaldo “Baldo” Granados Jr. in District 6. Rosalinda Montemayor was therefore removed from every published candidate view, and the conflicting District 6 drawing-board photo is no longer displayed. All old discrepancy warnings and the non-election District 4/5/7/8 cards were removed from the official ballot module.
+
+Every mayoral, district, and judicial candidate now shows the official full name, ballot name, campaign treasurer, treasurer filing, and ballot application. The Election 2026 hubs also show all six City-listed political forum times plus links for the official candidate table, sample ballots, campaign-finance reports, voting GIS map, and precinct maps. Seven regression tests passed, all 74 sitemap routes passed, and desktop/mobile screenshots verified the layouts. A live browser check found all 16 official ballot names, six forum entries, four City-source links, and no Rosalinda Montemayor reference.

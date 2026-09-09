@@ -21,6 +21,7 @@ import { AdUnit, Breadcrumbs, ContactMini, PageShell, SourceList } from "@/compo
 import { candidatesEn, issuesEn, votingResourcesEn, type Candidate, type Issue } from "@/data/resources-en";
 import { LocalRacesGrid } from "@/pages/LocalRaces";
 import BallotSnapshot from "@/components/BallotSnapshot";
+import OfficialElectionResources from "@/components/OfficialElectionResources";
 
 function PageHero({ eyebrow, title, description, children }: { eyebrow: string; title: string; description: string; children?: React.ReactNode }) {
   return (
@@ -115,6 +116,16 @@ export function EnglishCandidatePage({ slug }: { slug: string }) {
           <Breadcrumbs language="en" items={[{ label: "Candidates", href: "/candidatos" }, { label: candidate.name }]} />
           <div className="grid gap-10 lg:grid-cols-[1fr_330px] lg:gap-16">
             <article className="space-y-16">
+              <section>
+                <Eyebrow>Official City filing record</Eyebrow>
+                <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                  <div className="border border-[#102b36]/14 bg-[#fbf8f1] p-6"><p className="text-[8px] font-black uppercase tracking-[0.14em] text-[#718083]">Full legal name</p><p className="mt-3 font-display text-2xl font-black">{candidate.officialFullName}</p></div>
+                  <div className="border border-[#102b36]/14 bg-[#fbf8f1] p-6"><p className="text-[8px] font-black uppercase tracking-[0.14em] text-[#718083]">Campaign treasurer</p><p className="mt-3 font-display text-2xl font-black">{candidate.campaignTreasurer}</p></div>
+                </div>
+                <div className="mt-3 grid gap-3 sm:grid-cols-2"><a href={candidate.treasurerUrl} target="_blank" rel="noopener noreferrer" className="flex min-h-12 items-center justify-between bg-[#102b36] px-5 text-[9px] font-black uppercase tracking-[0.12em] text-white">Open treasurer filing <ArrowUpRight className="h-4 w-4 text-[#f0dfbd]" /></a><a href={candidate.applicationUrl} target="_blank" rel="noopener noreferrer" className="flex min-h-12 items-center justify-between border border-[#102b36]/20 bg-white px-5 text-[9px] font-black uppercase tracking-[0.12em]">Open ballot application <ArrowUpRight className="h-4 w-4 text-[#e75037]" /></a></div>
+                <a href="https://www.cityoflaredo.com/departments/elections/2026-candidates-information" target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.12em] text-[#e75037]">Source: City of Laredo 2026 Candidates Information <ArrowUpRight className="h-4 w-4" /></a>
+              </section>
+
               <section>
                 <Eyebrow>Who they are</Eyebrow>
                 <h2 className="mt-5 font-display text-4xl font-black tracking-[-0.045em]">Biography and experience</h2>
@@ -341,6 +352,7 @@ export function EnglishElectionOverview() {
       <Seo alternatePath="/es/elecciones-2026" title="Laredo elections 2026: mayor, districts and judge" description="A complete guide to Laredo's November 3, 2026 election: mayor, City Council Districts 1, 2, 3 and 6, Municipal Court Judge, issues, dates and voting resources." path="/election-2026" keywords={["Laredo elections 2026", "Laredo City Council candidates", "Laredo district elections", "Laredo mayor candidates"]} schema={{ "@context": "https://schema.org", "@type": "Event", name: "2026 Laredo Municipal Election", startDate: "2026-11-03", eventStatus: "https://schema.org/EventScheduled", location: { "@type": "Place", name: "Laredo, Texas" }, url: `${SITE_URL}/election-2026` }} />
       <PageHero eyebrow="Central guide" title="Laredo elections 2026" description="Mayor, City Council Districts 1, 2, 3 and 6, Municipal Court Judge, major issues and everything you need to cast an informed vote on November 3." />
       <BallotSnapshot language="en" compact />
+      <OfficialElectionResources language="en" />
       <section className="paper-texture py-16 sm:py-24"><div className="container"><Breadcrumbs language="en" items={[{ label: "2026 election" }]} /><div className="grid gap-6 lg:grid-cols-3"><Link href="/candidatos" className="group bg-[#102b36] p-7 text-white"><BadgeCheck className="h-6 w-6 text-[#e75037]" /><h2 className="mt-8 font-display text-4xl font-black">Candidates</h2><p className="mt-4 text-sm leading-6 text-[#bacbc7]">Profiles with the same structure and access to sources.</p><span className="mt-8 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.12em] text-[#f0dfbd]">View candidates <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></span></Link><Link href="/temas" className="group border border-[#102b36]/14 bg-[#fbf8f1] p-7"><BarChart3 className="h-6 w-6 text-[#e75037]" /><h2 className="mt-8 font-display text-4xl font-black">Issues</h2><p className="mt-4 text-sm leading-6 text-[#5b6d70]">Water, taxes, the budget, public safety, trade, and more.</p><span className="mt-8 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.12em]">Explore issues <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></span></Link><Link href="/votar" className="group bg-[#e75037] p-7 text-white"><Vote className="h-6 w-6 text-[#102b36]" /><h2 className="mt-8 font-display text-4xl font-black">How to vote</h2><p className="mt-4 text-sm leading-6 text-white/85">Registration, dates, locations, ballots, and identification.</p><span className="mt-8 flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.12em]">Make a plan <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></span></Link></div><LocalRacesGrid language="en" /><div className="mt-16"><Eyebrow>Who is running for mayor</Eyebrow><div className="mt-7 grid gap-5 md:grid-cols-2 xl:grid-cols-5">{candidatesEn.map((candidate) => <CandidateCard key={candidate.slug} candidate={candidate} />)}</div></div><div className="mt-16"><Eyebrow>Priority issues</Eyebrow><div className="mt-7 grid gap-5 md:grid-cols-2 xl:grid-cols-3">{issuesEn.slice(0, 6).map((issue) => <IssueCard key={issue.slug} issue={issue} />)}</div></div></div></section>
     </PageShell>
   );
