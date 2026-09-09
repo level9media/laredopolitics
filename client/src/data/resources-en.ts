@@ -53,7 +53,7 @@ export type VotingResource = {
   keywords: string[];
 };
 
-export const candidatesEn: Candidate[] = [
+const candidatesEnUnordered: Candidate[] = [
   {
     slug: "victor-trevino",
     name: "Dr. Victor D. Treviño",
@@ -273,6 +273,9 @@ export const candidatesEn: Candidate[] = [
     verifiedAsOf: "September 9, 2026",
   },
 ];
+
+const mayorBallotOrder = ["victor-trevino", "jd-gonzalez", "jorge-garza", "poncho-casso", "alyssa-cigarroa"];
+export const candidatesEn = [...candidatesEnUnordered].sort((a, b) => mayorBallotOrder.indexOf(a.slug) - mayorBallotOrder.indexOf(b.slug));
 
 export const issuesEn: Issue[] = [
   {
@@ -636,7 +639,7 @@ export const votingResourcesEn: VotingResource[] = [
 
 export const corePagesEn = [
   "/",
-  "/eleccion-alcalde-laredo-2026",
+  "/election-2026",
   "/candidatos",
   "/comparar-candidatos",
   ...candidatesEn.map((candidate) => `/candidatos/${candidate.slug}`),

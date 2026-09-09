@@ -36,7 +36,7 @@ export default function AdCarousel({ placement = "resource", compact = false, la
 
   if (!ad) return null;
   const spanishPlaceholders: Record<string, { name: string; tagline: string; cta: string }> = {
-    "presenting-available": { name: "Patrocinador principal", tagline: "Domina el espacio de mayor visibilidad en todo Laredo Mayor.", cta: "Reservar este espacio" },
+    "presenting-available": { name: "Patrocinador principal", tagline: "Domina el espacio de mayor visibilidad en todo Laredo Politics.", cta: "Reservar este espacio" },
     "local-business-available": { name: "Negocio local destacado", tagline: "Llega a votantes comprometidos de Laredo con un mensaje local claramente identificado.", cta: "Ver opciones publicitarias" },
     "professional-services-available": { name: "Servicios profesionales", tagline: "Un espacio rotativo premium para firmas locales de confianza.", cta: "Solicitar disponibilidad" },
     "community-brand-available": { name: "Marca comunitaria", tagline: "Mantén tu negocio visible junto a los temas que más sigue Laredo.", cta: "Solicitar el media kit" },

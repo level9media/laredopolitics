@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const SITE_URL = "https://laredohub-yakrq2cm.manus.space";
+const SITE_URL = "https://laredopolitics.com";
 const DEFAULT_IMAGE = "/manus-storage/laredo-civic-hero_d774494e.jpg";
 
 type SeoProps = {
@@ -27,7 +27,7 @@ function upsertMeta(selector: string, attribute: "name" | "property", value: str
 
 export default function Seo({ title, description, path, language = "en", alternatePath, image, type = "website", keywords = [], schema }: SeoProps) {
   useEffect(() => {
-    const fullTitle = title.includes("Laredo Mayor") ? title : `${title} | Laredo Mayor 2026`;
+    const fullTitle = title.includes("Laredo Politics") ? title : `${title} | Laredo Politics`;
     const canonical = `${SITE_URL}${path === "/" ? "" : path}`;
     const socialImage = image ? (image.startsWith("http") ? image : `${SITE_URL}${image}`) : `${SITE_URL}${DEFAULT_IMAGE}`;
     const resolvedAlternatePath = alternatePath ?? (language === "es" ? (path.replace(/^\/es/, "") || "/") : `/es${path === "/" ? "" : path}`);

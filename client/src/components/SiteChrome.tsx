@@ -12,14 +12,14 @@ const chromeCopy = {
     tagline: "The politics of our city",
     top: "Laredo, Texas · 2026 Election",
     standard: "Independent · Nonpartisan",
-    links: [["Election 2026", "/eleccion-alcalde-laredo-2026"], ["Candidates", "/candidatos"], ["Compare", "/comparar-candidatos"], ["Issues", "/temas"], ["How to vote", "/votar"]],
+    links: [["Election 2026", "/election-2026"], ["Mayor", "/candidatos"], ["Mayor compare", "/comparar-candidatos"], ["Issues", "/temas"], ["How to vote", "/votar"]],
     plan: "Voting plan",
     home: "Home",
     brief: "The Laredo Brief",
     briefLine: "Once a week. Only what matters.",
     subscribe: "Subscribe",
     footerLine: "Clear information for a city deciding its future.",
-    footerLinks: [["Candidates", "/candidatos"], ["Compare", "/comparar-candidatos"], ["Issues", "/temas"], ["How to vote", "/votar"], ["Methodology", "/metodologia"]],
+    footerLinks: [["Election 2026", "/election-2026"], ["Mayor", "/candidatos"], ["Mayor compare", "/comparar-candidatos"], ["Issues", "/temas"], ["How to vote", "/votar"], ["Methodology", "/metodologia"]],
     advertise: "Advertise",
     disclaimer: "Independent, nonpartisan resource. We do not endorse candidates. Verify voting instructions with official election authorities.",
     credit: "Site created and managed by",
@@ -34,14 +34,14 @@ const chromeCopy = {
     tagline: "La política de nuestra ciudad",
     top: "Laredo, Texas · Elección 2026",
     standard: "Independiente · No partidista",
-    links: [["Elección 2026", "/es/eleccion-alcalde-laredo-2026"], ["Candidatos", "/es/candidatos"], ["Comparar", "/es/comparar-candidatos"], ["Temas", "/es/temas"], ["Cómo votar", "/es/votar"]],
+    links: [["Elección 2026", "/es/elecciones-2026"], ["Alcaldía", "/es/candidatos"], ["Comparar alcalde", "/es/comparar-candidatos"], ["Temas", "/es/temas"], ["Cómo votar", "/es/votar"]],
     plan: "Plan para votar",
     home: "Inicio",
     brief: "El Brief de Laredo",
     briefLine: "Una vez por semana. Sólo lo que importa.",
     subscribe: "Suscríbeme",
     footerLine: "Información clara para una ciudad que decide su futuro.",
-    footerLinks: [["Candidatos", "/es/candidatos"], ["Comparar", "/es/comparar-candidatos"], ["Temas", "/es/temas"], ["Cómo votar", "/es/votar"], ["Metodología", "/es/metodologia"]],
+    footerLinks: [["Elección 2026", "/es/elecciones-2026"], ["Alcaldía", "/es/candidatos"], ["Comparar alcalde", "/es/comparar-candidatos"], ["Temas", "/es/temas"], ["Cómo votar", "/es/votar"], ["Metodología", "/es/metodologia"]],
     advertise: "Anúnciate",
     disclaimer: "Recurso independiente y no partidista. No respaldamos candidatos. Verifica instrucciones electorales con las autoridades oficiales.",
     credit: "Sitio creado y administrado por",
@@ -60,7 +60,7 @@ export function Logo({ inverted = false, language = "en" }: { inverted?: boolean
     <span className="flex items-center gap-3">
       <span className="brand-mark" aria-hidden="true"><img src="/manus-storage/laredo-texas-logo_e7a4842a.png" alt="" /></span>
       <span>
-        <span className={`block font-display text-[20px] font-black leading-none tracking-[-0.04em] sm:text-[24px] ${inverted ? "text-white" : "text-[#102b36]"}`}>LAREDO<span className="text-[#e75037]">MAYOR</span></span>
+        <span className={`block font-display text-[18px] font-black leading-none tracking-[-0.045em] sm:text-[22px] ${inverted ? "text-white" : "text-[#102b36]"}`}>LAREDO<span className="text-[#e75037]">POLITICS</span></span>
         <span className={`mt-1 block text-[7px] font-extrabold uppercase tracking-[0.25em] sm:text-[8px] ${inverted ? "text-[#9eb3b0]" : "text-[#66777a]"}`}>{t.tagline}</span>
       </span>
     </span>
@@ -71,7 +71,13 @@ export function SiteHeader({ language = "en" }: { language?: Language }) {
   const [open, setOpen] = useState(false);
   const t = chromeCopy[language];
   const currentPath = typeof window === "undefined" ? (language === "en" ? "/" : "/es") : window.location.pathname;
-  const languageHref = language === "en" ? `/es${currentPath === "/" ? "" : currentPath}` : (currentPath.replace(/^\/es/, "") || "/");
+  const languageHref = language === "en"
+    ? currentPath.startsWith("/election-2026")
+      ? `/es/elecciones-2026${currentPath.slice("/election-2026".length)}`
+      : `/es${currentPath === "/" ? "" : currentPath}`
+    : currentPath.startsWith("/es/elecciones-2026")
+      ? `/election-2026${currentPath.slice("/es/elecciones-2026".length)}`
+      : (currentPath.replace(/^\/es/, "") || "/");
   const languageLabel = language === "en" ? "ES" : "EN";
   const homeHref = language === "en" ? "/" : "/es";
 
@@ -80,7 +86,7 @@ export function SiteHeader({ language = "en" }: { language?: Language }) {
       <div className="bg-[#0d2732] text-[#dbe6e3]"><div className="container flex min-h-9 items-center justify-between py-2 text-[9px] font-bold uppercase tracking-[0.18em] sm:text-[10px]"><span>{t.top}</span><span className="hidden items-center gap-2 sm:flex"><ShieldCheck className="h-3.5 w-3.5" /> {t.standard}</span></div></div>
       <header className="sticky top-0 z-50 border-b border-[#132a33]/10 bg-[#f8f4ec]/95 shadow-[0_12px_30px_rgba(15,39,49,0.06)] backdrop-blur-xl">
         <div className="container flex h-[78px] items-center justify-between gap-4">
-          <Link href={homeHref} aria-label="Laredo Mayor home"><Logo language={language} /></Link>
+          <Link href={homeHref} aria-label="Laredo Politics home"><Logo language={language} /></Link>
           <nav className="hidden items-center gap-6 xl:flex" aria-label="Resource navigation">{t.links.map(([label, href]) => <Link key={href} href={href} data-umami-event={`resource-nav-${href.replaceAll("/", "") || "home"}`} className="nav-link text-[10px] font-extrabold uppercase tracking-[0.08em] text-[#243b43]">{label}</Link>)}</nav>
           <div className="flex items-center gap-2">
             <Link href={languageHref} className="grid h-10 min-w-10 place-items-center rounded-full border border-[#102b36]/15 bg-white px-3 text-[9px] font-black tracking-[0.12em] text-[#102b36]" aria-label={language === "en" ? "Ver sitio en español" : "View site in English"}>{languageLabel}</Link>
@@ -125,5 +131,5 @@ export function SourceList({ sources, language = "en" }: { sources: Array<{ titl
 
 export function ContactMini({ language = "en" }: { language?: Language }) {
   const t = chromeCopy[language];
-  return <section className="bg-[#102b36] p-7 text-white"><Mail className="h-5 w-5 text-[#e75037]" /><h2 className="mt-5 font-display text-3xl font-black tracking-[-0.035em]">{t.correction}</h2><p className="mt-3 text-sm leading-6 text-[#b9c9c7]">{t.correctionText}</p><a href="mailto:editor@laredomayor.com" className="mt-6 inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.13em] text-[#f0dfbd]">editor@laredomayor.com <ArrowRight className="h-4 w-4" /></a></section>;
+  return <section className="bg-[#102b36] p-7 text-white"><Mail className="h-5 w-5 text-[#e75037]" /><h2 className="mt-5 font-display text-3xl font-black tracking-[-0.035em]">{t.correction}</h2><p className="mt-3 text-sm leading-6 text-[#b9c9c7]">{t.correctionText}</p><a href="mailto:editor@laredopolitics.com" className="mt-6 inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.13em] text-[#f0dfbd]">editor@laredopolitics.com <ArrowRight className="h-4 w-4" /></a></section>;
 }

@@ -25,6 +25,7 @@ const EnglishMissingResource = lazy(() => import("./pages/ResourcePagesEnglish")
 const EnglishStaticResourcePage = lazy(() => import("./pages/ResourcePagesEnglish").then((module) => ({ default: module.EnglishStaticResourcePage })));
 const EnglishVotingHub = lazy(() => import("./pages/ResourcePagesEnglish").then((module) => ({ default: module.EnglishVotingHub })));
 const EnglishVotingResourcePage = lazy(() => import("./pages/ResourcePagesEnglish").then((module) => ({ default: module.EnglishVotingResourcePage })));
+const LocalRacePage = lazy(() => import("./pages/LocalRaces").then((module) => ({ default: module.LocalRacePage })));
 
 function ScrollToTop() {
   const [location] = useLocation();
@@ -41,6 +42,9 @@ function Router() {
       <Switch>
         <Route path="/">{() => <Home defaultLanguage="en" />}</Route>
         <Route path="/es">{() => <Home defaultLanguage="es" />}</Route>
+        <Route path="/election-2026/:slug">{(params) => <LocalRacePage slug={params.slug} language="en" />}</Route>
+        <Route path="/election-2026" component={EnglishElectionOverview} />
+        <Route path="/eleccion-alcalde-laredo-2026/:slug">{(params) => <LocalRacePage slug={params.slug} language="en" />}</Route>
         <Route path="/eleccion-alcalde-laredo-2026" component={EnglishElectionOverview} />
         <Route path="/candidatos" component={EnglishCandidateHub} />
         <Route path="/comparar-candidatos" component={EnglishCandidateComparison} />
@@ -53,6 +57,9 @@ function Router() {
         <Route path="/finanzas-de-campana">{() => <EnglishStaticResourcePage kind="finance" />}</Route>
         <Route path="/verificacion-de-datos">{() => <EnglishStaticResourcePage kind="facts" />}</Route>
         <Route path="/metodologia">{() => <EnglishStaticResourcePage kind="methodology" />}</Route>
+        <Route path="/es/elecciones-2026/:slug">{(params) => <LocalRacePage slug={params.slug} language="es" />}</Route>
+        <Route path="/es/elecciones-2026" component={ElectionOverview} />
+        <Route path="/es/eleccion-alcalde-laredo-2026/:slug">{(params) => <LocalRacePage slug={params.slug} language="es" />}</Route>
         <Route path="/es/eleccion-alcalde-laredo-2026" component={ElectionOverview} />
         <Route path="/es/candidatos" component={CandidateHub} />
         <Route path="/es/comparar-candidatos" component={CandidateComparison} />
@@ -87,7 +94,7 @@ function App() {
       >
         <TooltipProvider>
           <Toaster />
-          <Suspense fallback={<div className="grid min-h-[45vh] place-items-center bg-[#f4f0e8] font-display text-xl font-black text-[#102b36]">Loading Laredo Mayor…</div>}>
+          <Suspense fallback={<div className="grid min-h-[45vh] place-items-center bg-[#f4f0e8] font-display text-xl font-black text-[#102b36]">Loading Laredo Politics…</div>}>
             <Router />
           </Suspense>
         </TooltipProvider>

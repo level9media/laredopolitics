@@ -23,7 +23,7 @@ export const advertisers: Advertiser[] = [
   {
     id: "presenting-available",
     businessName: "Presenting sponsor",
-    tagline: "Own the highest-visibility placement across Laredo Mayor.",
+    tagline: "Own the highest-visibility placement across Laredo Politics.",
     cta: "Reserve this placement",
     href: "/#advertise-form",
     placement: "sitewide",

@@ -1,8 +1,12 @@
 import { readFile } from "node:fs/promises";
 
 const sitemap = await readFile("/home/ubuntu/laredo-politics-hub/client/public/sitemap.xml", "utf8");
-const paths = [...sitemap.matchAll(/<loc>https:\/\/laredohub-yakrq2cm\.manus\.space([^<]*)<\/loc>/g)].map((match) => match[1] || "/");
+const paths = [...sitemap.matchAll(/<loc>https:\/\/laredopolitics\.com([^<]*)<\/loc>/g)].map((match) => match[1] || "/");
 const failures = [];
+
+if (!paths.length) {
+  throw new Error("No laredopolitics.com URLs were found in the sitemap.");
+}
 
 for (const path of paths) {
   const response = await fetch(`http://127.0.0.1:3000${path}`);

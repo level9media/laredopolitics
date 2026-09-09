@@ -87,6 +87,9 @@ const candidates = [
   },
 ];
 
+const mayorBallotOrder = ["victor-trevino", "jd-gonzalez", "jorge-garza", "poncho-casso", "alyssa-cigarroa"];
+const candidatesInBallotOrder = [...candidates].sort((a, b) => mayorBallotOrder.indexOf(a.slug) - mayorBallotOrder.indexOf(b.slug));
+
 const issues = [
   {
     number: "01",
@@ -155,7 +158,7 @@ const dates = [
 
 const copy = {
   es: {
-    nav: ["Lo Bueno / Lo Malo", "Candidatos", "Agenda", "Cómo votar"],
+    nav: ["Lo Bueno / Lo Malo", "Elección 2026", "Alcaldía", "Cómo votar"],
     independent: "Periodismo cívico independiente",
     heroEyebrow: "Elección municipal · 3 de noviembre de 2026",
     heroTitleA: "La política",
@@ -232,7 +235,7 @@ const copy = {
     updated: "Actualizado en septiembre de 2026",
   },
   en: {
-    nav: ["The Good / The Bad", "Candidates", "Agenda", "How to vote"],
+    nav: ["The Good / The Bad", "Election 2026", "Mayor", "How to vote"],
     independent: "Independent civic journalism",
     heroEyebrow: "Municipal election · November 3, 2026",
     heroTitleA: "The politics",
@@ -340,7 +343,7 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
   }, []);
 
   const routePrefix = language === "es" ? "/es" : "";
-  const navTargets = ["#bueno-malo", `${routePrefix}/candidatos`, `${routePrefix}/calendario-electoral`, `${routePrefix}/votar`];
+  const navTargets = ["#bueno-malo", language === "es" ? "/es/elecciones-2026" : "/election-2026", `${routePrefix}/candidatos`, `${routePrefix}/votar`];
 
   const switchLanguage = (nextLanguage: Language) => {
     if (nextLanguage === language) return;
@@ -400,20 +403,20 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
           ? "Se abrirá tu correo con toda la información preparada."
           : "Your email app will open with all inquiry details prepared.",
     });
-    window.location.href = `mailto:advertise@laredomayor.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = `mailto:advertise@laredopolitics.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     form.reset();
   };
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#f4f0e8] text-[#132a33]">
       <Seo
-        title={language === "en" ? "Laredo Mayor Election 2026 | Candidates, Issues & Voting" : "Elección de alcalde de Laredo 2026 | Candidatos y cómo votar"}
-        description={language === "en" ? "Independent guide to the 2026 Laredo mayor election: five candidates, The Good / The Bad, water, property taxes, key dates and official voting resources." : "Guía independiente sobre la elección de alcalde de Laredo 2026: cinco candidatos, Lo Bueno / Lo Malo, agua, impuestos, fechas y recursos para votar."}
+        title={language === "en" ? "Laredo Politics | 2026 Elections, Candidates & Voting" : "Laredo Politics | Elecciones 2026, candidatos y cómo votar"}
+        description={language === "en" ? "Independent guide to Laredo's 2026 elections: mayor, City Council districts, Municipal Court Judge, candidate profiles, issues, dates and official voting resources." : "Guía independiente de las elecciones de Laredo 2026: alcalde, distritos del Concejo, Juez Municipal, perfiles, temas, fechas y recursos oficiales para votar."}
         path={language === "en" ? "/" : "/es"}
         language={language}
         alternatePath={language === "en" ? "/es" : "/"}
         keywords={language === "en" ? ["Laredo mayor election 2026", "Laredo mayor candidates", "Laredo politics", "Laredo voting guide", "Laredo Texas election"] : ["elección alcalde Laredo 2026", "candidatos alcalde Laredo", "elecciones Laredo", "cómo votar Laredo"]}
-        schema={{ "@context": "https://schema.org", "@type": "WebSite", name: "Laredo Mayor", url: SITE_URL, inLanguage: ["en", "es"] }}
+        schema={{ "@context": "https://schema.org", "@type": "WebSite", name: "Laredo Politics", url: SITE_URL, inLanguage: ["en", "es"] }}
       />
       <div className="bg-[#0d2732] text-[#dbe6e3]">
         <div className="container flex min-h-9 items-center justify-between py-2 text-[10px] font-bold uppercase tracking-[0.2em] sm:text-xs">
@@ -428,11 +431,11 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
 
       <header className="sticky top-0 z-50 border-b border-[#132a33]/10 bg-[#f8f4ec]/95 shadow-[0_12px_30px_rgba(15,39,49,0.06)] backdrop-blur-xl">
         <div className="container flex h-[78px] items-center justify-between gap-4">
-          <a href="#top" className="group flex items-center gap-3" aria-label="Laredo Mayor home">
+          <a href="#top" className="group flex items-center gap-3" aria-label="Laredo Politics home">
             <EditorialMark />
             <div>
               <p className="font-display text-[22px] font-black leading-none tracking-[-0.04em] text-[#102b36] sm:text-[25px]">
-                LAREDO<span className="text-[#e75037]">MAYOR</span>
+                LAREDO<span className="text-[#e75037]">POLITICS</span>
               </p>
               <p className="mt-1 text-[8px] font-extrabold uppercase tracking-[0.28em] text-[#66777a] sm:text-[9px]">
                 {language === "en" ? "The politics of our city" : "La política de nuestra ciudad"}
@@ -693,7 +696,7 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
             </div>
 
             <div className="grid border-l border-t border-white/15 md:grid-cols-2 xl:grid-cols-5">
-              {candidates.map((candidate, index) => (
+              {candidatesInBallotOrder.map((candidate, index) => (
                 <article
                   key={candidate.name}
                   className="candidate-card group flex min-h-[500px] flex-col overflow-hidden border-b border-r border-white/15 transition duration-300 hover:bg-white/[0.055]"
@@ -859,8 +862,8 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
                       <h3 className="mt-6 max-w-md font-display text-4xl font-black leading-[0.94] tracking-[-0.045em] sm:text-5xl">{t.contactTitle}</h3>
                       <p className="mt-6 max-w-md text-sm leading-6 text-[#b9c9c7]">{t.contactText}</p>
                     </div>
-                    <a href="mailto:advertise@laredomayor.com" className="relative mt-10 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.13em] text-[#f0dfbd] hover:text-white">
-                      <Mail className="h-4 w-4" /> advertise@laredomayor.com
+                    <a href="mailto:advertise@laredopolitics.com" className="relative mt-10 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.13em] text-[#f0dfbd] hover:text-white">
+                      <Mail className="h-4 w-4" /> advertise@laredopolitics.com
                     </a>
                   </div>
                 </div>
@@ -939,14 +942,14 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
             <div>
               <a href="#top" className="inline-flex items-center gap-3 text-white">
                 <EditorialMark />
-                <span className="font-display text-2xl font-black tracking-[-0.04em]">LAREDO<span className="text-[#e75037]">MAYOR</span></span>
+                <span className="font-display text-2xl font-black tracking-[-0.04em]">LAREDO<span className="text-[#e75037]">POLITICS</span></span>
               </a>
               <p className="mt-4 max-w-lg font-display text-xl italic text-[#d4dfdc]">{t.footerLine}</p>
             </div>
             <div className="flex flex-wrap gap-x-6 gap-y-3 text-[9px] font-black uppercase tracking-[0.15em]">
               <a href={`${routePrefix}/temas`} className="hover:text-white">{t.nav[0]}</a>
-              <a href={`${routePrefix}/candidatos`} className="hover:text-white">{t.nav[1]}</a>
-              <a href={`${routePrefix}/calendario-electoral`} className="hover:text-white">{t.nav[2]}</a>
+              <a href={language === "es" ? "/es/elecciones-2026" : "/election-2026"} className="hover:text-white">{t.nav[1]}</a>
+              <a href={`${routePrefix}/candidatos`} className="hover:text-white">{t.nav[2]}</a>
               <a href="#anunciate" className="hover:text-white">{language === "en" ? "Advertise" : "Anúnciate"}</a>
             </div>
           </div>
