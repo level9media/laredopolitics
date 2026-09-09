@@ -25,3 +25,18 @@ The live Water Infrastructure route loaded with the expected canonical title, co
 The corrected browser test passed. Selecting **Útil** updated `aria-pressed` to `true` and persisted `up` under the issue-specific local-storage key. The live route also exposed the correct production canonical URL, a non-empty meta description, Article JSON-LD, and an advertiser-form link targeting `/#advertise-form`.
 
 The advertiser deep-link test also passed. Opening `/#advertise-form` landed with the form in the viewport. The form contains five required conversion fields—name, business, email, budget, and message—plus an optional phone field and the expected **Solicitar información** submit action.
+
+## English-first, candidate portraits, and advertising carousel
+
+Full-page desktop checks at 1440 × 1000 confirmed that `/` and all primary resource routes render in English, while `/es` and `/es/...` retain the complete Spanish experience. The English candidate hub displays four verified portraits with consistent 4:3 framing and a clearly designed initials fallback for Jorge A. Garza. Candidate dossier portrait credit is visible without overpowering the editorial content.
+
+The new ad carousel renders as a premium full-width homepage placement and a compact resource-page placement. It shows the active rotation count, previous/next controls, a clear advertising label, and a direct advertiser inquiry link. The carousel pauses during hover or keyboard focus and advances automatically every seven seconds otherwise.
+
+Full-page mobile checks at 390 × 844 confirmed clean single-column stacking, readable English and Spanish typography, intact candidate portrait crops, visible carousel controls, and no horizontal overflow on the homepage, candidate hub, or Spanish Water Infrastructure guide.
+
+## Live browser verification
+
+The primary homepage opened in English with the correct English title, an English `html lang` value, the production canonical URL, and English, Spanish, and `x-default` alternate links. Four verified candidate portraits rendered in the homepage candidate section, while the fifth candidate retained the intended initials fallback. Activating the **Next ad** control changed the displayed advertiser, confirming the carousel's manual rotation behavior.
+The Spanish Alyssa Cigarroa dossier passed live browser verification: `html lang="es"`, the `/es/candidatos/alyssa-cigarroa` canonical, reciprocal English and Spanish hreflang URLs, the verified portrait and visible source credit, and an **EN** switch that returns to the exact equivalent English dossier.
+
+Final validation passed with no TypeScript errors. The production build succeeds, all **64 sitemap routes** return the application shell, and all four optimized candidate portrait assets exist. English and Spanish resource libraries are code-split into separate lazy-loaded chunks, reducing the primary JavaScript payload from approximately 235 KB gzip to 179 KB gzip before route-specific content loads.

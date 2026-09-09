@@ -4,11 +4,9 @@ import {
   ArrowRight,
   ArrowUpRight,
   BadgeCheck,
-  Building2,
   CalendarDays,
   CheckCircle2,
   CircleAlert,
-  Landmark,
   Mail,
   MapPin,
   Menu,
@@ -23,6 +21,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import Seo, { SITE_URL } from "@/components/Seo";
+import AdCarousel from "@/components/AdCarousel";
 
 const candidates = [
   {
@@ -30,6 +29,7 @@ const candidates = [
     initial: "C",
     name: 'Alfonso “Poncho” Casso',
     ballot: "Poncho Casso",
+    photoUrl: "/manus-storage/poncho-casso_12b48698.webp",
     detail: {
       es: "Exconcejal y empresario local. Su campaña de 2026 se concentra en rendición de cuentas, transparencia, seguridad del agua y comercio internacional.",
       en: "Former council member and local businessman. His 2026 campaign centers on accountability, transparency, water security, and international trade.",
@@ -41,6 +41,7 @@ const candidates = [
     initial: "C",
     name: "Alyssa Cigarroa",
     ballot: "Alyssa Cigarroa",
+    photoUrl: "/manus-storage/alyssa-cigarroa_e25ad183.webp",
     detail: {
       es: "Representa al Distrito VIII desde 2020 y cofundó Cultivarte. Su campaña destaca preparación ante crisis, vivienda y participación pública.",
       en: "District VIII council member since 2020 and Cultivarte co-founder. Her campaign highlights crisis readiness, housing and public participation.",
@@ -52,6 +53,7 @@ const candidates = [
     initial: "G",
     name: "JD Gonzalez",
     ballot: "JD Gonzalez",
+    photoUrl: "/manus-storage/jd-gonzalez_2ce6ae85.webp",
     detail: {
       es: "Veterano de diez años de la Marina con experiencia en comercio internacional. Su campaña se enfoca en calles, agua, seguridad y oportunidades.",
       en: "A ten-year Navy veteran with an international trade background. His campaign focuses on roads, water, safety and economic opportunity.",
@@ -63,6 +65,7 @@ const candidates = [
     initial: "G",
     name: "Jorge A. Garza",
     ballot: "Jorge A. Garza",
+    photoUrl: undefined,
     detail: {
       es: "La Ciudad de Laredo lo incluye oficialmente en la contienda para alcalde de 2026. Hasta ahora hay poca información pública verificable sobre su experiencia y plataforma.",
       en: "The City of Laredo officially lists him in the 2026 mayoral race. Limited verifiable public information about his experience and platform is currently available.",
@@ -74,6 +77,7 @@ const candidates = [
     initial: "T",
     name: "Dr. Victor D. Treviño",
     ballot: "Victor D. Trevino",
+    photoUrl: "/manus-storage/victor-trevino_7c486ac0.webp",
     incumbent: true,
     detail: {
       es: "Médico, exautoridad de salud y alcalde desde 2022. Busca un segundo mandato destacando inversión en agua, seguridad y acceso a salud.",
@@ -202,7 +206,7 @@ const copy = {
     adsEyebrow: "Comercio local",
     adsTitle: "Los negocios que mueven Laredo",
     adsText:
-      "Patrocinios claramente identificados. La publicidad apoya este proyecto, pero nunca compra cobertura editorial.",
+      "Patrocinios claramente identificados. Cada ubicación rota hasta seis negocios antes de abrir una segunda rotación; la publicidad nunca compra cobertura editorial.",
     adLabel: "ESPACIO DISPONIBLE",
     adBig: "Patrocinador principal",
     adLocal: "Tu negocio aquí",
@@ -279,7 +283,7 @@ const copy = {
     adsEyebrow: "Local commerce",
     adsTitle: "The businesses that move Laredo",
     adsText:
-      "Clearly labeled sponsorships. Advertising supports this project, but never buys editorial coverage.",
+      "Clearly labeled sponsorships. Each placement rotates up to six businesses before a second rotation opens; advertising never buys editorial coverage.",
     adLabel: "SPACE AVAILABLE",
     adBig: "Presenting sponsor",
     adLocal: "Your business here",
@@ -316,8 +320,8 @@ function EditorialMark() {
   );
 }
 
-export default function Home() {
-  const [language, setLanguage] = useState<Language>("es");
+export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Language }) {
+  const [language, setLanguage] = useState<Language>(defaultLanguage);
   const [menuOpen, setMenuOpen] = useState(false);
   const [issueVotes, setIssueVotes] = useState<Record<string, "up" | "down">>(() => {
     if (typeof window === "undefined") return {};
@@ -335,7 +339,13 @@ export default function Home() {
     }
   }, []);
 
-  const navTargets = ["#bueno-malo", "/candidatos", "/calendario-electoral", "/votar"];
+  const routePrefix = language === "es" ? "/es" : "";
+  const navTargets = ["#bueno-malo", `${routePrefix}/candidatos`, `${routePrefix}/calendario-electoral`, `${routePrefix}/votar`];
+
+  const switchLanguage = (nextLanguage: Language) => {
+    if (nextLanguage === language) return;
+    window.location.href = nextLanguage === "es" ? "/es" : "/";
+  };
 
   const handleIssueVote = (issueNumber: string, vote: "up" | "down") => {
     const removingVote = issueVotes[issueNumber] === vote;
@@ -397,16 +407,18 @@ export default function Home() {
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#f4f0e8] text-[#132a33]">
       <Seo
-        title="Laredo Mayor 2026 | Candidatos, temas y cómo votar"
-        description="Guía independiente sobre la elección de alcalde de Laredo 2026: candidatos, Lo Bueno / Lo Malo, agua, impuestos, fechas y recursos para votar."
-        path="/"
-        keywords={["Laredo mayor 2026", "candidatos alcalde Laredo", "elecciones Laredo", "Laredo politics", "cómo votar Laredo"]}
-        schema={{ "@context": "https://schema.org", "@type": "WebSite", name: "Laredo Mayor", url: SITE_URL, inLanguage: ["es", "en"] }}
+        title={language === "en" ? "Laredo Mayor Election 2026 | Candidates, Issues & Voting" : "Elección de alcalde de Laredo 2026 | Candidatos y cómo votar"}
+        description={language === "en" ? "Independent guide to the 2026 Laredo mayor election: five candidates, The Good / The Bad, water, property taxes, key dates and official voting resources." : "Guía independiente sobre la elección de alcalde de Laredo 2026: cinco candidatos, Lo Bueno / Lo Malo, agua, impuestos, fechas y recursos para votar."}
+        path={language === "en" ? "/" : "/es"}
+        language={language}
+        alternatePath={language === "en" ? "/es" : "/"}
+        keywords={language === "en" ? ["Laredo mayor election 2026", "Laredo mayor candidates", "Laredo politics", "Laredo voting guide", "Laredo Texas election"] : ["elección alcalde Laredo 2026", "candidatos alcalde Laredo", "elecciones Laredo", "cómo votar Laredo"]}
+        schema={{ "@context": "https://schema.org", "@type": "WebSite", name: "Laredo Mayor", url: SITE_URL, inLanguage: ["en", "es"] }}
       />
       <div className="bg-[#0d2732] text-[#dbe6e3]">
         <div className="container flex min-h-9 items-center justify-between py-2 text-[10px] font-bold uppercase tracking-[0.2em] sm:text-xs">
           <span className="flex items-center gap-2">
-            <MapPin className="h-3.5 w-3.5 text-[#e75037]" /> Laredo, Texas · Septiembre 2026
+            <MapPin className="h-3.5 w-3.5 text-[#e75037]" /> Laredo, Texas · {language === "en" ? "September" : "Septiembre"} 2026
           </span>
           <span className="hidden items-center gap-2 sm:flex">
             <ShieldCheck className="h-3.5 w-3.5" /> {t.independent}
@@ -423,7 +435,7 @@ export default function Home() {
                 LAREDO<span className="text-[#e75037]">MAYOR</span>
               </p>
               <p className="mt-1 text-[8px] font-extrabold uppercase tracking-[0.28em] text-[#66777a] sm:text-[9px]">
-                La política de nuestra ciudad
+                {language === "en" ? "The politics of our city" : "La política de nuestra ciudad"}
               </p>
             </div>
           </a>
@@ -445,17 +457,7 @@ export default function Home() {
             <div className="hidden rounded-full border border-[#132a33]/15 bg-white/60 p-1 sm:flex" aria-label="Language selection">
               <button
                 type="button"
-                onClick={() => setLanguage("es")}
-                className={`rounded-full px-3 py-1.5 text-[10px] font-black tracking-wider transition ${
-                  language === "es" ? "bg-[#102b36] text-white" : "text-[#53676b] hover:text-[#102b36]"
-                }`}
-                aria-pressed={language === "es"}
-              >
-                ESP
-              </button>
-              <button
-                type="button"
-                onClick={() => setLanguage("en")}
+                onClick={() => switchLanguage("en")}
                 className={`rounded-full px-3 py-1.5 text-[10px] font-black tracking-wider transition ${
                   language === "en" ? "bg-[#102b36] text-white" : "text-[#53676b] hover:text-[#102b36]"
                 }`}
@@ -463,12 +465,22 @@ export default function Home() {
               >
                 ENG
               </button>
+              <button
+                type="button"
+                onClick={() => switchLanguage("es")}
+                className={`rounded-full px-3 py-1.5 text-[10px] font-black tracking-wider transition ${
+                  language === "es" ? "bg-[#102b36] text-white" : "text-[#53676b] hover:text-[#102b36]"
+                }`}
+                aria-pressed={language === "es"}
+              >
+                ESP
+              </button>
             </div>
             <a
               href="#votar"
               className="hidden items-center gap-2 bg-[#e75037] px-4 py-3 text-[10px] font-black uppercase tracking-[0.14em] text-white shadow-[4px_4px_0_#102b36] transition duration-200 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_#102b36] active:scale-[0.97] sm:flex"
             >
-              <Vote className="h-4 w-4" /> Vota Nov. 3
+              <Vote className="h-4 w-4" /> {language === "en" ? "Vote Nov. 3" : "Vota Nov. 3"}
             </a>
             <button
               type="button"
@@ -487,17 +499,17 @@ export default function Home() {
               <div className="mb-3 flex rounded-full border border-[#132a33]/15 bg-white p-1 sm:hidden">
                 <button
                   type="button"
-                  onClick={() => setLanguage("es")}
-                  className={`flex-1 rounded-full px-3 py-2 text-[10px] font-black ${language === "es" ? "bg-[#102b36] text-white" : "text-[#53676b]"}`}
-                >
-                  ESPAÑOL
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setLanguage("en")}
+                  onClick={() => switchLanguage("en")}
                   className={`flex-1 rounded-full px-3 py-2 text-[10px] font-black ${language === "en" ? "bg-[#102b36] text-white" : "text-[#53676b]"}`}
                 >
                   ENGLISH
+                </button>
+                <button
+                  type="button"
+                  onClick={() => switchLanguage("es")}
+                  className={`flex-1 rounded-full px-3 py-2 text-[10px] font-black ${language === "es" ? "bg-[#102b36] text-white" : "text-[#53676b]"}`}
+                >
+                  ESPAÑOL
                 </button>
               </div>
               {t.nav.map((label, index) => (
@@ -540,14 +552,14 @@ export default function Home() {
               </p>
               <div className="reveal reveal-delay-3 mt-9 flex flex-wrap items-center gap-4">
                 <a
-                  href="/candidatos"
+                  href={`${routePrefix}/candidatos`}
                   data-umami-event="hero-candidates"
                   className="group flex items-center gap-3 bg-[#e75037] px-6 py-4 text-xs font-black uppercase tracking-[0.12em] text-white shadow-[5px_5px_0_#f0dfbd] transition duration-200 hover:-translate-y-1 hover:shadow-[7px_7px_0_#f0dfbd] active:scale-[0.97]"
                 >
                   {t.seeCandidates} <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-1" />
                 </a>
                 <a
-                  href="/temas"
+                  href={`${routePrefix}/temas`}
                   data-umami-event="hero-analysis"
                   className="group flex items-center gap-2 border-b border-white/40 py-2 text-xs font-black uppercase tracking-[0.12em] text-white transition hover:border-[#f0dfbd] hover:text-[#f0dfbd]"
                 >
@@ -684,15 +696,13 @@ export default function Home() {
               {candidates.map((candidate, index) => (
                 <article
                   key={candidate.name}
-                  className="candidate-card group flex min-h-[420px] flex-col border-b border-r border-white/15 p-6 transition duration-300 hover:bg-white/[0.055] sm:p-8"
+                  className="candidate-card group flex min-h-[500px] flex-col overflow-hidden border-b border-r border-white/15 transition duration-300 hover:bg-white/[0.055]"
                 >
-                  <div className="flex items-start justify-between">
-                    <div className="grid h-14 w-14 place-items-center rounded-full border border-[#f0dfbd]/35 bg-[#173844] font-display text-2xl font-black text-[#f0dfbd] transition duration-300 group-hover:border-[#e75037] group-hover:bg-[#e75037] group-hover:text-white">
-                      {candidate.initial}
-                    </div>
-                    <span className="font-mono text-[10px] font-bold tracking-widest text-white/35">0{index + 1}</span>
+                  <div className="relative aspect-[4/3] overflow-hidden bg-[#173844]">
+                    {candidate.photoUrl ? <img src={candidate.photoUrl} alt={language === "en" ? `Portrait of ${candidate.name}` : `Retrato de ${candidate.name}`} className="h-full w-full object-cover object-top grayscale-[12%] transition duration-500 group-hover:scale-[1.025] group-hover:grayscale-0" /> : <div className="grid h-full w-full place-items-center font-display text-6xl font-black text-[#f0dfbd]">{candidate.initial}</div>}
+                    <span className="absolute right-4 top-4 bg-[#102b36]/85 px-2 py-1 font-mono text-[10px] font-bold tracking-widest text-white">0{index + 1}</span>
                   </div>
-                  <div className="mt-8">
+                  <div className="flex flex-1 flex-col p-6 sm:p-7">
                     <p className="text-[9px] font-black uppercase tracking-[0.19em] text-[#80a09b]">{t.ballot}: {candidate.ballot}</p>
                     <h3 className="mt-3 font-display text-[28px] font-black leading-[0.98] tracking-[-0.04em] text-white">{candidate.name}</h3>
                     {candidate.incumbent && (
@@ -701,14 +711,14 @@ export default function Home() {
                       </span>
                     )}
                     <p className="mt-5 text-sm leading-6 text-[#b9c9c7]">{candidate.detail[language]}</p>
+                    <a
+                      href={`${routePrefix}/candidatos/${candidate.slug}`}
+                      data-umami-event={`candidate-${candidate.ballot.toLowerCase().replaceAll(" ", "-")}`}
+                      className="mt-auto flex items-center justify-between border-t border-white/15 pt-5 text-[10px] font-black uppercase tracking-[0.14em] text-[#f0dfbd] transition hover:text-white"
+                    >
+                      {t.profile} <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
+                    </a>
                   </div>
-                  <a
-                    href={`/candidatos/${candidate.slug}`}
-                    data-umami-event={`candidate-${candidate.ballot.toLowerCase().replaceAll(" ", "-")}`}
-                    className="mt-auto flex items-center justify-between border-t border-white/15 pt-5 text-[10px] font-black uppercase tracking-[0.14em] text-[#f0dfbd] transition hover:text-white"
-                  >
-                    {t.profile} <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
-                  </a>
                 </article>
               ))}
             </div>
@@ -816,56 +826,14 @@ export default function Home() {
               <p className="max-w-xl border-l border-[#e75037] pl-5 text-base leading-7 text-[#5a6c6e] lg:justify-self-end">{t.adsText}</p>
             </div>
 
-            <div className="grid gap-5 lg:grid-cols-12">
-              <button
-                type="button"
-                onClick={handleAdInquiry}
-                className="ad-slot group relative min-h-[285px] overflow-hidden bg-[#102b36] p-7 text-left text-white shadow-[0_20px_60px_rgba(16,43,54,0.15)] lg:col-span-7 sm:p-10"
-              >
-                <div className="absolute -right-8 -top-12 h-56 w-56 rounded-full border-[34px] border-[#f0dfbd]/10 transition duration-500 group-hover:scale-110" />
-                <div className="absolute bottom-0 right-0 h-36 w-52 bg-[#e75037] [clip-path:polygon(35%_0,100%_0,100%_100%,0_100%)]" />
-                <div className="relative flex h-full flex-col justify-between">
-                  <div className="flex items-center justify-between">
-                    <span className="bg-[#e75037] px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.18em]">{t.adLabel}</span>
-                    <Landmark className="h-6 w-6 text-[#f0dfbd]" />
-                  </div>
-                  <div className="mt-20 max-w-md">
-                    <p className="font-display text-4xl font-black tracking-[-0.045em] sm:text-5xl">{t.adBig}</p>
-                    <p className="mt-3 text-xs font-bold uppercase tracking-[0.15em] text-[#a9c1bc]">970 × 250 · Home + Newsletter</p>
-                  </div>
-                </div>
-              </button>
-
-              <div className="grid gap-5 sm:grid-cols-2 lg:col-span-5">
-                {[Building2, Store].map((Icon, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    onClick={handleAdInquiry}
-                    className="ad-slot group flex min-h-[285px] flex-col justify-between border border-[#102b36]/15 bg-[#fbf8f1] p-7 text-left shadow-[0_14px_45px_rgba(16,43,54,0.08)] transition duration-300 hover:-translate-y-1 hover:border-[#e75037] hover:shadow-[0_20px_55px_rgba(16,43,54,0.13)]"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-[8px] font-black uppercase tracking-[0.17em] text-[#e75037]">{t.adLabel}</span>
-                      <Icon className="h-5 w-5 text-[#102b36]/35 transition group-hover:text-[#e75037]" />
-                    </div>
-                    <div>
-                      <p className="font-display text-3xl font-black leading-none tracking-[-0.035em] text-[#102b36]">{t.adLocal}</p>
-                      <p className="mt-3 text-xs leading-5 text-[#667679]">300 × 250 · {t.adDetail}</p>
-                      <span className="mt-5 inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.13em] text-[#102b36]">
-                        {t.rates} <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
-                      </span>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
+            <AdCarousel placement="homepage" language={language} />
 
             <div className="mt-8 grid gap-5 border border-[#102b36]/15 bg-[#e9e2d5] p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-center">
               <div className="flex items-start gap-4">
                 <div className="grid h-12 w-12 shrink-0 place-items-center bg-[#102b36] text-white"><Mail className="h-5 w-5" /></div>
                 <div>
                   <p className="font-display text-xl font-black text-[#102b36]">Media Kit · Laredo 2026</p>
-                  <p className="mt-1 text-sm leading-6 text-[#617174]">Audience, placement options, editorial firewall and monthly reporting.</p>
+                  <p className="mt-1 text-sm leading-6 text-[#617174]">{language === "en" ? "Audience, placement options, editorial firewall and monthly reporting." : "Audiencia, opciones de ubicación, separación editorial y reportes mensuales."}</p>
                 </div>
               </div>
               <button
@@ -943,7 +911,7 @@ export default function Home() {
         <section className="bg-[#0d2732] py-16 text-white">
           <div className="container grid gap-8 lg:grid-cols-[1fr_0.8fr] lg:items-center">
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#e75037]">El Brief de Laredo</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#e75037]">{language === "en" ? "The Laredo Brief" : "El Brief de Laredo"}</p>
               <h2 className="mt-3 font-display text-3xl font-black tracking-[-0.035em] sm:text-4xl">
                 {language === "es" ? "Una vez por semana. Sólo lo que importa." : "Once a week. Only what matters."}
               </h2>
@@ -954,7 +922,7 @@ export default function Home() {
                 id="brief-email"
                 type="email"
                 required
-                placeholder="tu@email.com"
+                placeholder={language === "en" ? "you@email.com" : "tu@email.com"}
                 className="min-h-14 flex-1 border border-white/20 bg-white/10 px-5 text-sm text-white outline-none placeholder:text-white/45 focus:border-[#f0dfbd]"
               />
               <button type="submit" className="min-h-14 bg-[#f0dfbd] px-6 text-[10px] font-black uppercase tracking-[0.14em] text-[#102b36] transition hover:bg-white active:scale-[0.97]">
@@ -976,17 +944,17 @@ export default function Home() {
               <p className="mt-4 max-w-lg font-display text-xl italic text-[#d4dfdc]">{t.footerLine}</p>
             </div>
             <div className="flex flex-wrap gap-x-6 gap-y-3 text-[9px] font-black uppercase tracking-[0.15em]">
-              <a href="/temas" className="hover:text-white">{t.nav[0]}</a>
-              <a href="/candidatos" className="hover:text-white">{t.nav[1]}</a>
-              <a href="/calendario-electoral" className="hover:text-white">{t.nav[2]}</a>
-              <a href="#anunciate" className="hover:text-white">Anúnciate</a>
+              <a href={`${routePrefix}/temas`} className="hover:text-white">{t.nav[0]}</a>
+              <a href={`${routePrefix}/candidatos`} className="hover:text-white">{t.nav[1]}</a>
+              <a href={`${routePrefix}/calendario-electoral`} className="hover:text-white">{t.nav[2]}</a>
+              <a href="#anunciate" className="hover:text-white">{language === "en" ? "Advertise" : "Anúnciate"}</a>
             </div>
           </div>
           <div className="mt-7 flex flex-col gap-4 text-[11px] leading-5 md:flex-row md:items-start md:justify-between">
             <p className="max-w-3xl">{t.disclaimer}</p>
             <div className="shrink-0 text-left md:text-right">
               <p className="font-mono text-[9px] uppercase tracking-widest">{t.updated}</p>
-              <p className="mt-2 text-[9px]">Sitio creado y administrado por <a href="https://levelninemedia.com/" target="_blank" rel="noopener noreferrer" className="font-bold text-white underline decoration-[#e75037] underline-offset-4">Level Nine Media</a></p>
+              <p className="mt-2 text-[9px]">{language === "en" ? "Site created and managed by" : "Sitio creado y administrado por"} <a href="https://levelninemedia.com/" target="_blank" rel="noopener noreferrer" className="font-bold text-white underline decoration-[#e75037] underline-offset-4">Level Nine Media</a></p>
             </div>
           </div>
         </div>

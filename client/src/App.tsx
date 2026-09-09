@@ -1,22 +1,30 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
-import {
-  CandidateComparison,
-  CandidateHub,
-  CandidatePage,
-  ElectionOverview,
-  IssueHub,
-  IssuePage,
-  MissingResource,
-  StaticResourcePage,
-  VotingHub,
-  VotingResourcePage,
-} from "./pages/ResourcePages";
+
+const CandidateComparison = lazy(() => import("./pages/ResourcePages").then((module) => ({ default: module.CandidateComparison })));
+const CandidateHub = lazy(() => import("./pages/ResourcePages").then((module) => ({ default: module.CandidateHub })));
+const CandidatePage = lazy(() => import("./pages/ResourcePages").then((module) => ({ default: module.CandidatePage })));
+const ElectionOverview = lazy(() => import("./pages/ResourcePages").then((module) => ({ default: module.ElectionOverview })));
+const IssueHub = lazy(() => import("./pages/ResourcePages").then((module) => ({ default: module.IssueHub })));
+const IssuePage = lazy(() => import("./pages/ResourcePages").then((module) => ({ default: module.IssuePage })));
+const StaticResourcePage = lazy(() => import("./pages/ResourcePages").then((module) => ({ default: module.StaticResourcePage })));
+const VotingHub = lazy(() => import("./pages/ResourcePages").then((module) => ({ default: module.VotingHub })));
+const VotingResourcePage = lazy(() => import("./pages/ResourcePages").then((module) => ({ default: module.VotingResourcePage })));
+const EnglishCandidateComparison = lazy(() => import("./pages/ResourcePagesEnglish").then((module) => ({ default: module.EnglishCandidateComparison })));
+const EnglishCandidateHub = lazy(() => import("./pages/ResourcePagesEnglish").then((module) => ({ default: module.EnglishCandidateHub })));
+const EnglishCandidatePage = lazy(() => import("./pages/ResourcePagesEnglish").then((module) => ({ default: module.EnglishCandidatePage })));
+const EnglishElectionOverview = lazy(() => import("./pages/ResourcePagesEnglish").then((module) => ({ default: module.EnglishElectionOverview })));
+const EnglishIssueHub = lazy(() => import("./pages/ResourcePagesEnglish").then((module) => ({ default: module.EnglishIssueHub })));
+const EnglishIssuePage = lazy(() => import("./pages/ResourcePagesEnglish").then((module) => ({ default: module.EnglishIssuePage })));
+const EnglishMissingResource = lazy(() => import("./pages/ResourcePagesEnglish").then((module) => ({ default: module.EnglishMissingResource })));
+const EnglishStaticResourcePage = lazy(() => import("./pages/ResourcePagesEnglish").then((module) => ({ default: module.EnglishStaticResourcePage })));
+const EnglishVotingHub = lazy(() => import("./pages/ResourcePagesEnglish").then((module) => ({ default: module.EnglishVotingHub })));
+const EnglishVotingResourcePage = lazy(() => import("./pages/ResourcePagesEnglish").then((module) => ({ default: module.EnglishVotingResourcePage })));
 
 function ScrollToTop() {
   const [location] = useLocation();
@@ -31,22 +39,35 @@ function Router() {
     <>
       <ScrollToTop />
       <Switch>
-        <Route path={"/"} component={Home} />
-        <Route path="/eleccion-alcalde-laredo-2026" component={ElectionOverview} />
-        <Route path="/candidatos" component={CandidateHub} />
-        <Route path="/comparar-candidatos" component={CandidateComparison} />
-        <Route path="/candidatos/:slug">{(params) => <CandidatePage slug={params.slug} />}</Route>
-        <Route path="/temas" component={IssueHub} />
-        <Route path="/temas/:slug">{(params) => <IssuePage slug={params.slug} />}</Route>
-        <Route path="/votar" component={VotingHub} />
-        <Route path="/votar/:slug">{(params) => <VotingResourcePage slug={params.slug} />}</Route>
-        <Route path="/calendario-electoral">{() => <StaticResourcePage kind="calendar" />}</Route>
-        <Route path="/finanzas-de-campana">{() => <StaticResourcePage kind="finance" />}</Route>
-        <Route path="/verificacion-de-datos">{() => <StaticResourcePage kind="facts" />}</Route>
-        <Route path="/metodologia">{() => <StaticResourcePage kind="methodology" />}</Route>
-        <Route path={"/404"} component={MissingResource} />
+        <Route path="/">{() => <Home defaultLanguage="en" />}</Route>
+        <Route path="/es">{() => <Home defaultLanguage="es" />}</Route>
+        <Route path="/eleccion-alcalde-laredo-2026" component={EnglishElectionOverview} />
+        <Route path="/candidatos" component={EnglishCandidateHub} />
+        <Route path="/comparar-candidatos" component={EnglishCandidateComparison} />
+        <Route path="/candidatos/:slug">{(params) => <EnglishCandidatePage slug={params.slug} />}</Route>
+        <Route path="/temas" component={EnglishIssueHub} />
+        <Route path="/temas/:slug">{(params) => <EnglishIssuePage slug={params.slug} />}</Route>
+        <Route path="/votar" component={EnglishVotingHub} />
+        <Route path="/votar/:slug">{(params) => <EnglishVotingResourcePage slug={params.slug} />}</Route>
+        <Route path="/calendario-electoral">{() => <EnglishStaticResourcePage kind="calendar" />}</Route>
+        <Route path="/finanzas-de-campana">{() => <EnglishStaticResourcePage kind="finance" />}</Route>
+        <Route path="/verificacion-de-datos">{() => <EnglishStaticResourcePage kind="facts" />}</Route>
+        <Route path="/metodologia">{() => <EnglishStaticResourcePage kind="methodology" />}</Route>
+        <Route path="/es/eleccion-alcalde-laredo-2026" component={ElectionOverview} />
+        <Route path="/es/candidatos" component={CandidateHub} />
+        <Route path="/es/comparar-candidatos" component={CandidateComparison} />
+        <Route path="/es/candidatos/:slug">{(params) => <CandidatePage slug={params.slug} />}</Route>
+        <Route path="/es/temas" component={IssueHub} />
+        <Route path="/es/temas/:slug">{(params) => <IssuePage slug={params.slug} />}</Route>
+        <Route path="/es/votar" component={VotingHub} />
+        <Route path="/es/votar/:slug">{(params) => <VotingResourcePage slug={params.slug} />}</Route>
+        <Route path="/es/calendario-electoral">{() => <StaticResourcePage kind="calendar" />}</Route>
+        <Route path="/es/finanzas-de-campana">{() => <StaticResourcePage kind="finance" />}</Route>
+        <Route path="/es/verificacion-de-datos">{() => <StaticResourcePage kind="facts" />}</Route>
+        <Route path="/es/metodologia">{() => <StaticResourcePage kind="methodology" />}</Route>
+        <Route path={"/404"} component={EnglishMissingResource} />
         {/* Final fallback route */}
-        <Route component={MissingResource} />
+        <Route component={EnglishMissingResource} />
       </Switch>
     </>
   );
@@ -66,7 +87,9 @@ function App() {
       >
         <TooltipProvider>
           <Toaster />
-          <Router />
+          <Suspense fallback={<div className="grid min-h-[45vh] place-items-center bg-[#f4f0e8] font-display text-xl font-black text-[#102b36]">Loading Laredo Mayor…</div>}>
+            <Router />
+          </Suspense>
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

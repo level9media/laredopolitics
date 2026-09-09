@@ -19,6 +19,9 @@ export type Candidate = {
   questions: string[];
   sources: Source[];
   verifiedAsOf?: string;
+  photoUrl?: string;
+  photoAlt?: string;
+  photoCredit?: string;
 };
 
 export type Issue = {
@@ -57,6 +60,9 @@ export const candidates: Candidate[] = [
     ballotName: "Victor D. Trevino",
     role: "Alcalde actual",
     initials: "VT",
+    photoUrl: "/manus-storage/victor-trevino_7c486ac0.webp",
+    photoAlt: "Retrato de Dr. Victor D. Treviño",
+    photoCredit: "Courtesy / Laredo Morning Times",
     summary: "Médico, exautoridad de salud y alcalde de Laredo desde 2022. Busca un segundo mandato en la elección municipal de 2026.",
     bio: [
       "La biografía de la Ciudad indica que Treviño nació y creció en Laredo, estudió en Nixon High School, Laredo Junior College y Texas A&M University–Kingsville, y completó su residencia en LSU Charity Hospital en 1984.",
@@ -99,6 +105,9 @@ export const candidates: Candidate[] = [
     ballotName: "Alyssa Cigarroa",
     role: "Concejal del Distrito VIII",
     initials: "AC",
+    photoUrl: "/manus-storage/alyssa-cigarroa_e25ad183.webp",
+    photoAlt: "Retrato de Alyssa Cigarroa",
+    photoCredit: "Courtesy Alyssa Cigarroa for Mayor campaign",
     summary: "Concejal del Distrito VIII desde 2020 y cofundadora de Cultivarte. Su campaña destaca preparación municipal, vivienda y participación pública.",
     bio: [
       "Cigarroa es una laredense de quinta generación y representa al Distrito VIII en el Concejo Municipal desde que ganó como candidata write-in en la segunda vuelta de 2020.",
@@ -141,6 +150,9 @@ export const candidates: Candidate[] = [
     ballotName: "Poncho Casso",
     role: "Exconcejal y empresario local",
     initials: "PC",
+    photoUrl: "/manus-storage/poncho-casso_12b48698.webp",
+    photoAlt: "Retrato de Alfonso Poncho Casso",
+    photoCredit: "KGNS",
     summary: "Exconcejal y empresario local. Su campaña de 2026 se concentra en rendición de cuentas, transparencia, seguridad del agua y comercio internacional.",
     bio: [
       "Casso formó parte del Concejo Municipal de Laredo de 1994 a 1998, según la cobertura local revisada.",
@@ -183,6 +195,9 @@ export const candidates: Candidate[] = [
     ballotName: "JD Gonzalez",
     role: "Veterano y profesional del comercio",
     initials: "JG",
+    photoUrl: "/manus-storage/jd-gonzalez_2ce6ae85.webp",
+    photoAlt: "Retrato de JD Gonzalez",
+    photoCredit: "Courtesy JD Gonzalez for Mayor campaign",
     summary: "Veterano de diez años de la Marina con experiencia en comercio internacional. Su campaña se enfoca en calles, agua, seguridad y oportunidades.",
     bio: [
       "La Ciudad lo identifica oficialmente como Jose David Gonzalez, con el nombre JD Gonzalez en la boleta.",

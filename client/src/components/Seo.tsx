@@ -7,6 +7,9 @@ type SeoProps = {
   title: string;
   description: string;
   path: string;
+  language?: "en" | "es";
+  alternatePath?: string;
+  image?: string;
   type?: "website" | "article";
   keywords?: string[];
   schema?: Record<string, unknown> | Array<Record<string, unknown>>;
@@ -22,22 +25,26 @@ function upsertMeta(selector: string, attribute: "name" | "property", value: str
   element.content = content;
 }
 
-export default function Seo({ title, description, path, type = "website", keywords = [], schema }: SeoProps) {
+export default function Seo({ title, description, path, language = "en", alternatePath, image, type = "website", keywords = [], schema }: SeoProps) {
   useEffect(() => {
     const fullTitle = title.includes("Laredo Mayor") ? title : `${title} | Laredo Mayor 2026`;
     const canonical = `${SITE_URL}${path === "/" ? "" : path}`;
+    const socialImage = image ? (image.startsWith("http") ? image : `${SITE_URL}${image}`) : `${SITE_URL}${DEFAULT_IMAGE}`;
+    const resolvedAlternatePath = alternatePath ?? (language === "es" ? (path.replace(/^\/es/, "") || "/") : `/es${path === "/" ? "" : path}`);
     document.title = fullTitle;
+    document.documentElement.lang = language;
 
     upsertMeta('meta[name="description"]', "name", "description", description);
     upsertMeta('meta[name="keywords"]', "name", "keywords", keywords.join(", "));
     upsertMeta('meta[property="og:title"]', "property", "og:title", fullTitle);
     upsertMeta('meta[property="og:description"]', "property", "og:description", description);
     upsertMeta('meta[property="og:type"]', "property", "og:type", type);
+    upsertMeta('meta[property="og:locale"]', "property", "og:locale", language === "en" ? "en_US" : "es_US");
     upsertMeta('meta[property="og:url"]', "property", "og:url", canonical);
-    upsertMeta('meta[property="og:image"]', "property", "og:image", `${SITE_URL}${DEFAULT_IMAGE}`);
+    upsertMeta('meta[property="og:image"]', "property", "og:image", socialImage);
     upsertMeta('meta[name="twitter:title"]', "name", "twitter:title", fullTitle);
     upsertMeta('meta[name="twitter:description"]', "name", "twitter:description", description);
-    upsertMeta('meta[name="twitter:image"]', "name", "twitter:image", `${SITE_URL}${DEFAULT_IMAGE}`);
+    upsertMeta('meta[name="twitter:image"]', "name", "twitter:image", socialImage);
 
     let canonicalLink = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     if (!canonicalLink) {
@@ -46,6 +53,23 @@ export default function Seo({ title, description, path, type = "website", keywor
       document.head.appendChild(canonicalLink);
     }
     canonicalLink.href = canonical;
+
+    document.querySelectorAll('link[data-laredo-hreflang="true"]').forEach((element) => element.remove());
+    if (resolvedAlternatePath) {
+      const alternates = [
+        { hreflang: language, href: canonical },
+        { hreflang: language === "en" ? "es" : "en", href: `${SITE_URL}${resolvedAlternatePath}` },
+        { hreflang: "x-default", href: SITE_URL },
+      ];
+      alternates.forEach((alternate) => {
+        const link = document.createElement("link");
+        link.rel = "alternate";
+        link.hreflang = alternate.hreflang;
+        link.href = alternate.href;
+        link.dataset.laredoHreflang = "true";
+        document.head.appendChild(link);
+      });
+    }
 
     const existing = document.getElementById("page-json-ld");
     existing?.remove();
@@ -57,8 +81,11 @@ export default function Seo({ title, description, path, type = "website", keywor
       document.head.appendChild(script);
     }
 
-    return () => document.getElementById("page-json-ld")?.remove();
-  }, [description, keywords, path, schema, title, type]);
+    return () => {
+      document.getElementById("page-json-ld")?.remove();
+      document.querySelectorAll('link[data-laredo-hreflang="true"]').forEach((element) => element.remove());
+    };
+  }, [alternatePath, description, image, keywords, language, path, schema, title, type]);
 
   return null;
 }
