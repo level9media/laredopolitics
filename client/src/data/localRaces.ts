@@ -19,6 +19,11 @@ export type LocalRace = {
   verifiedAsOf: string;
 };
 
+export const mayorBallot = {
+  evidenceImage: "/manus-storage/mayor_22040f78.webp",
+  candidates: ["Victor D. Trevino", "JD Gonzalez", "Jorge A. Garza", "Poncho Casso", "Alyssa Cigarroa"],
+};
+
 export const localRaces: LocalRace[] = [
   {
     slug: "district-1",

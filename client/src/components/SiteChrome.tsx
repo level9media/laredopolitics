@@ -3,6 +3,7 @@ import { ArrowRight, Mail, Menu, ShieldCheck, Vote, X } from "lucide-react";
 import { Link } from "wouter";
 import { toast } from "sonner";
 import AdCarousel from "@/components/AdCarousel";
+import { submitDirectForm } from "@/lib/directForms";
 
 type Language = "en" | "es";
 type Crumb = { label: string; href?: string };
@@ -111,8 +112,31 @@ export function AdUnit({ compact = false, language = "en", placement = "resource
 
 export function NewsletterBar({ language = "en" }: { language?: Language }) {
   const t = chromeCopy[language];
-  const submit = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); toast.success(t.toast, { description: t.toastDescription }); };
-  return <section className="bg-[#e75037] py-9 text-white"><div className="container grid gap-6 lg:grid-cols-[1fr_0.8fr] lg:items-center"><div><p className="text-[9px] font-black uppercase tracking-[0.18em] text-[#102b36]">{t.brief}</p><p className="mt-2 font-display text-2xl font-black tracking-[-0.03em]">{t.briefLine}</p></div><form onSubmit={submit} className="flex flex-col gap-2 sm:flex-row"><label htmlFor={`resource-email-${language}`} className="sr-only">Email</label><input id={`resource-email-${language}`} type="email" required placeholder="you@email.com" className="min-h-13 flex-1 border border-white/30 bg-white px-4 text-sm text-[#102b36] outline-none placeholder:text-[#718083] focus:border-[#102b36]" /><button data-umami-event="resource-newsletter-submit" className="flex min-h-13 items-center justify-center gap-2 bg-[#102b36] px-5 text-[9px] font-black uppercase tracking-[0.12em] text-white active:scale-[0.97]" type="submit">{t.subscribe} <ArrowRight className="h-4 w-4" /></button></form></div></section>;
+  const [sending, setSending] = useState(false);
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    setSending(true);
+    try {
+      await submitDirectForm("site_update_signup", {
+        subject: "New site update signup",
+        email: String(data.get("email") || ""),
+        language,
+      });
+      form.reset();
+      toast.success(language === "es" ? "Registro enviado" : "Signup sent", {
+        description: language === "es" ? "Ya estás en la lista de actualizaciones." : "You’re on the site-update list.",
+      });
+    } catch {
+      toast.error(language === "es" ? "No se pudo enviar" : "Submission failed", {
+        description: language === "es" ? "Inténtalo de nuevo en un momento." : "Please try again in a moment.",
+      });
+    } finally {
+      setSending(false);
+    }
+  };
+  return <section className="bg-[#e75037] py-9 text-white"><div className="container grid gap-6 lg:grid-cols-[1fr_0.8fr] lg:items-center"><div><p className="text-[9px] font-black uppercase tracking-[0.18em] text-[#102b36]">{t.brief}</p><p className="mt-2 font-display text-2xl font-black tracking-[-0.03em]">{t.briefLine}</p></div><form onSubmit={submit} className="flex flex-col gap-2 sm:flex-row"><label htmlFor={`resource-email-${language}`} className="sr-only">Email</label><input id={`resource-email-${language}`} name="email" type="email" required placeholder={language === "es" ? "tu@email.com" : "you@email.com"} className="min-h-13 flex-1 border border-white/30 bg-white px-4 text-sm text-[#102b36] outline-none placeholder:text-[#718083] focus:border-[#102b36]" /><button disabled={sending} data-umami-event="resource-newsletter-submit" className="flex min-h-13 items-center justify-center gap-2 bg-[#102b36] px-5 text-[9px] font-black uppercase tracking-[0.12em] text-white active:scale-[0.97] disabled:cursor-wait disabled:opacity-65" type="submit">{sending ? (language === "es" ? "Enviando…" : "Sending…") : t.subscribe} <ArrowRight className="h-4 w-4" /></button></form></div></section>;
 }
 
 export function SiteFooter({ language = "en" }: { language?: Language }) {
@@ -131,5 +155,27 @@ export function SourceList({ sources, language = "en" }: { sources: Array<{ titl
 
 export function ContactMini({ language = "en" }: { language?: Language }) {
   const t = chromeCopy[language];
-  return <section className="bg-[#102b36] p-7 text-white"><Mail className="h-5 w-5 text-[#e75037]" /><h2 className="mt-5 font-display text-3xl font-black tracking-[-0.035em]">{t.correction}</h2><p className="mt-3 text-sm leading-6 text-[#b9c9c7]">{t.correctionText}</p><a href="mailto:editor@laredopolitics.com" className="mt-6 inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.13em] text-[#f0dfbd]">editor@laredopolitics.com <ArrowRight className="h-4 w-4" /></a></section>;
+  const [sending, setSending] = useState(false);
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    setSending(true);
+    try {
+      await submitDirectForm("correction_submission", {
+        subject: "Correction or source submission",
+        name: String(data.get("name") || ""),
+        email: String(data.get("email") || ""),
+        correction_or_source: String(data.get("message") || ""),
+        language,
+      });
+      form.reset();
+      toast.success(language === "es" ? "Documento enviado" : "Submission sent");
+    } catch {
+      toast.error(language === "es" ? "No se pudo enviar" : "Submission failed");
+    } finally {
+      setSending(false);
+    }
+  };
+  return <section className="bg-[#102b36] p-7 text-white"><Mail className="h-5 w-5 text-[#e75037]" /><h2 className="mt-5 font-display text-3xl font-black tracking-[-0.035em]">{t.correction}</h2><p className="mt-3 text-sm leading-6 text-[#b9c9c7]">{t.correctionText}</p><form onSubmit={submit} className="mt-6 grid gap-3"><input name="name" required placeholder={language === "es" ? "Tu nombre" : "Your name"} className="min-h-11 border border-white/15 bg-white/10 px-3 text-xs text-white outline-none placeholder:text-white/45 focus:border-[#f0dfbd]" /><input name="email" type="email" required placeholder={language === "es" ? "Tu email" : "Your email"} className="min-h-11 border border-white/15 bg-white/10 px-3 text-xs text-white outline-none placeholder:text-white/45 focus:border-[#f0dfbd]" /><textarea name="message" required rows={4} placeholder={language === "es" ? "Corrección o enlace a la fuente" : "Correction or source link"} className="resize-y border border-white/15 bg-white/10 p-3 text-xs leading-5 text-white outline-none placeholder:text-white/45 focus:border-[#f0dfbd]" /><button type="submit" disabled={sending} className="flex min-h-11 items-center justify-center gap-2 bg-[#f0dfbd] px-4 text-[8px] font-black uppercase tracking-[0.13em] text-[#102b36] active:scale-[0.97] disabled:cursor-wait disabled:opacity-65">{sending ? (language === "es" ? "Enviando…" : "Sending…") : (language === "es" ? "Enviar directamente" : "Send directly")} <ArrowRight className="h-4 w-4" /></button></form><p className="mt-4 text-[8px] uppercase tracking-[0.1em] text-[#8fa8a5]">{language === "es" ? "Envío directo · sin abrir tu correo" : "Direct delivery · no email app opens"}</p></section>;
 }

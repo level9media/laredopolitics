@@ -22,6 +22,8 @@ import {
 import { toast } from "sonner";
 import Seo, { SITE_URL } from "@/components/Seo";
 import AdCarousel from "@/components/AdCarousel";
+import BallotSnapshot from "@/components/BallotSnapshot";
+import { submitDirectForm } from "@/lib/directForms";
 
 const candidates = [
   {
@@ -326,6 +328,8 @@ function EditorialMark() {
 export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Language }) {
   const [language, setLanguage] = useState<Language>(defaultLanguage);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [advertiserSending, setAdvertiserSending] = useState(false);
+  const [briefSending, setBriefSending] = useState(false);
   const [issueVotes, setIssueVotes] = useState<Record<string, "up" | "down">>(() => {
     if (typeof window === "undefined") return {};
     try {
@@ -370,41 +374,58 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
     document.getElementById("advertise-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
-  const handleBriefSignup = (event: FormEvent<HTMLFormElement>) => {
+  const handleBriefSignup = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    toast.success(language === "es" ? "El resumen está listo para conectar" : "The briefing is ready to connect", {
-      description:
-        language === "es"
-          ? "Conecta este formulario a tu CRM o plataforma de email en la siguiente fase."
-          : "Connect this form to your CRM or email platform in the next phase.",
-    });
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    setBriefSending(true);
+    try {
+      await submitDirectForm("newsletter_signup", {
+        subject: "New Laredo Brief signup",
+        email: String(data.get("email") || ""),
+        language,
+      });
+      form.reset();
+      toast.success(language === "es" ? "Ya estás en la lista" : "You’re on the list", {
+        description: language === "es" ? "Tu registro fue enviado correctamente." : "Your signup was sent successfully.",
+      });
+    } catch {
+      toast.error(language === "es" ? "No se pudo enviar" : "Submission failed", {
+        description: language === "es" ? "Inténtalo de nuevo en un momento." : "Please try again in a moment.",
+      });
+    } finally {
+      setBriefSending(false);
+    }
   };
 
-  const handleAdvertiserSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleAdvertiserSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
     const business = String(data.get("business") || "Local business");
-    const subject = `Advertising inquiry — ${business}`;
-    const body = [
-      `Name: ${String(data.get("name") || "")}`,
-      `Business: ${business}`,
-      `Email: ${String(data.get("email") || "")}`,
-      `Phone: ${String(data.get("phone") || "")}`,
-      `Monthly budget: ${String(data.get("budget") || "")}`,
-      "",
-      "Promotion details:",
-      String(data.get("message") || ""),
-    ].join("\n");
-
-    toast.success(language === "es" ? "Solicitud lista para enviar" : "Your inquiry is ready", {
-      description:
-        language === "es"
-          ? "Se abrirá tu correo con toda la información preparada."
-          : "Your email app will open with all inquiry details prepared.",
-    });
-    window.location.href = `mailto:advertise@laredopolitics.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    form.reset();
+    setAdvertiserSending(true);
+    try {
+      await submitDirectForm("advertiser_inquiry", {
+        subject: `Advertising inquiry — ${business}`,
+        name: String(data.get("name") || ""),
+        business,
+        email: String(data.get("email") || ""),
+        phone: String(data.get("phone") || ""),
+        monthly_budget: String(data.get("budget") || ""),
+        promotion_details: String(data.get("message") || ""),
+        language,
+      });
+      form.reset();
+      toast.success(language === "es" ? "Solicitud enviada" : "Inquiry sent", {
+        description: language === "es" ? "Nos comunicaremos contigo directamente." : "We’ll contact you directly.",
+      });
+    } catch {
+      toast.error(language === "es" ? "No se pudo enviar" : "Submission failed", {
+        description: language === "es" ? "Inténtalo de nuevo en un momento." : "Please try again in a moment.",
+      });
+    } finally {
+      setAdvertiserSending(false);
+    }
   };
 
   return (
@@ -599,6 +620,8 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
             ])}
           </div>
         </div>
+
+        <BallotSnapshot language={language} />
 
         <section id="bueno-malo" className="paper-texture scroll-mt-24 bg-[#f4f0e8] py-24 sm:py-32">
           <div className="container">
@@ -862,9 +885,9 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
                       <h3 className="mt-6 max-w-md font-display text-4xl font-black leading-[0.94] tracking-[-0.045em] sm:text-5xl">{t.contactTitle}</h3>
                       <p className="mt-6 max-w-md text-sm leading-6 text-[#b9c9c7]">{t.contactText}</p>
                     </div>
-                    <a href="mailto:advertise@laredopolitics.com" className="relative mt-10 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.13em] text-[#f0dfbd] hover:text-white">
-                      <Mail className="h-4 w-4" /> advertise@laredopolitics.com
-                    </a>
+                    <p className="relative mt-10 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.13em] text-[#f0dfbd]">
+                      <Mail className="h-4 w-4" /> {language === "es" ? "Envío directo · sin abrir tu correo" : "Direct delivery · no email app opens"}
+                    </p>
                   </div>
                 </div>
 
@@ -901,8 +924,8 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
                   </label>
                   <div className="flex flex-col gap-4 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
                     <p className="max-w-sm text-[10px] leading-4 text-[#738184]">{t.privacy}</p>
-                    <button type="submit" data-umami-event="advertiser-form-submit" className="flex min-h-13 items-center justify-center gap-3 bg-[#e75037] px-6 text-[10px] font-black uppercase tracking-[0.14em] text-white shadow-[4px_4px_0_#102b36] transition duration-200 hover:-translate-y-1 hover:shadow-[6px_6px_0_#102b36] active:scale-[0.97]">
-                      {t.send} <Send className="h-4 w-4" />
+                    <button type="submit" disabled={advertiserSending} data-umami-event="advertiser-form-submit" className="flex min-h-13 items-center justify-center gap-3 bg-[#e75037] px-6 text-[10px] font-black uppercase tracking-[0.14em] text-white shadow-[4px_4px_0_#102b36] transition duration-200 hover:-translate-y-1 hover:shadow-[6px_6px_0_#102b36] active:scale-[0.97] disabled:cursor-wait disabled:opacity-65">
+                      {advertiserSending ? (language === "es" ? "Enviando…" : "Sending…") : t.send} <Send className="h-4 w-4" />
                     </button>
                   </div>
                 </form>
@@ -923,13 +946,14 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
               <label htmlFor="brief-email" className="sr-only">Email</label>
               <input
                 id="brief-email"
+                name="email"
                 type="email"
                 required
                 placeholder={language === "en" ? "you@email.com" : "tu@email.com"}
                 className="min-h-14 flex-1 border border-white/20 bg-white/10 px-5 text-sm text-white outline-none placeholder:text-white/45 focus:border-[#f0dfbd]"
               />
-              <button type="submit" className="min-h-14 bg-[#f0dfbd] px-6 text-[10px] font-black uppercase tracking-[0.14em] text-[#102b36] transition hover:bg-white active:scale-[0.97]">
-                {language === "es" ? "Quiero el resumen" : "Send me the brief"}
+              <button type="submit" disabled={briefSending} className="min-h-14 bg-[#f0dfbd] px-6 text-[10px] font-black uppercase tracking-[0.14em] text-[#102b36] transition hover:bg-white active:scale-[0.97] disabled:cursor-wait disabled:opacity-65">
+                {briefSending ? (language === "es" ? "Enviando…" : "Sending…") : language === "es" ? "Quiero el resumen" : "Send me the brief"}
               </button>
             </form>
           </div>
