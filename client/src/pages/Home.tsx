@@ -13,8 +13,11 @@ import {
   MapPin,
   Menu,
   Newspaper,
+  Send,
   ShieldCheck,
   Store,
+  ThumbsDown,
+  ThumbsUp,
   Vote,
   X,
 } from "lucide-react";
@@ -152,6 +155,9 @@ const copy = {
     focusText:
       "Cada semana ponemos un tema local bajo la lupa. Reconocemos avances, señalamos fallas y separamos promesas de resultados—con la misma vara para todos.",
     methodology: "Nuestra metodología",
+    votePrompt: "¿Te sirvió este análisis?",
+    voteYes: "Sí, fue útil",
+    voteNo: "Le falta contexto",
     good: "LO BUENO",
     bad: "LO MALO",
     candidatesEyebrow: "Elección 2026",
@@ -187,6 +193,19 @@ const copy = {
     adDetail: "Presencia mensual · Audiencia local · Reporte de clics",
     rates: "Solicitar tarifas",
     mediaKit: "Ver oportunidades",
+    contactEyebrow: "Anúnciate con nosotros",
+    contactTitle: "Pon tu negocio frente a los votantes de Laredo.",
+    contactText:
+      "Cuéntanos qué quieres promover. Te enviaremos opciones de ubicación, precios y disponibilidad para este ciclo electoral.",
+    name: "Tu nombre",
+    business: "Nombre del negocio",
+    email: "Correo electrónico",
+    phone: "Teléfono (opcional)",
+    budget: "Presupuesto mensual",
+    chooseBudget: "Selecciona un rango",
+    message: "¿Qué quieres promocionar?",
+    send: "Solicitar información",
+    privacy: "Tu información se usa únicamente para responder a esta solicitud.",
     footerLine: "Información clara para una ciudad que decide su futuro.",
     disclaimer:
       "Recurso independiente y no partidista. No respaldamos candidatos. Verifica fechas y lugares con las autoridades electorales oficiales.",
@@ -213,6 +232,9 @@ const copy = {
     focusText:
       "Each week we put one local issue under the lens. We recognize progress, flag failures and separate promises from results—with the same standard for everyone.",
     methodology: "Our methodology",
+    votePrompt: "Was this analysis useful?",
+    voteYes: "Yes, helpful",
+    voteNo: "Needs more context",
     good: "THE GOOD",
     bad: "THE BAD",
     candidatesEyebrow: "Election 2026",
@@ -248,6 +270,19 @@ const copy = {
     adDetail: "Monthly presence · Local audience · Click reporting",
     rates: "Request rates",
     mediaKit: "View opportunities",
+    contactEyebrow: "Advertise with us",
+    contactTitle: "Put your business in front of Laredo voters.",
+    contactText:
+      "Tell us what you want to promote. We will send placement options, pricing and availability for this election cycle.",
+    name: "Your name",
+    business: "Business name",
+    email: "Email address",
+    phone: "Phone (optional)",
+    budget: "Monthly budget",
+    chooseBudget: "Choose a range",
+    message: "What do you want to promote?",
+    send: "Request advertising info",
+    privacy: "Your information is used only to respond to this inquiry.",
     footerLine: "Clear information for a city deciding its future.",
     disclaimer:
       "Independent, nonpartisan resource. We do not endorse candidates. Verify dates and locations with official election authorities.",
@@ -268,17 +303,36 @@ function EditorialMark() {
 export default function Home() {
   const [language, setLanguage] = useState<Language>("es");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [issueVotes, setIssueVotes] = useState<Record<string, "up" | "down">>(() => {
+    if (typeof window === "undefined") return {};
+    try {
+      return JSON.parse(window.localStorage.getItem("laredo-issue-votes") || "{}");
+    } catch {
+      return {};
+    }
+  });
   const t = copy[language];
 
   const navTargets = ["#bueno-malo", "#candidatos", "#agenda", "#votar"];
 
-  const handleAdInquiry = () => {
-    toast("Inventario publicitario listo", {
-      description:
-        language === "es"
-          ? "Agrega tu correo de ventas para activar solicitudes y tu media kit."
-          : "Add your sales email to activate inquiries and the media kit.",
+  const handleIssueVote = (issueNumber: string, vote: "up" | "down") => {
+    const removingVote = issueVotes[issueNumber] === vote;
+    setIssueVotes((current) => {
+      const next = { ...current };
+      if (next[issueNumber] === vote) delete next[issueNumber];
+      else next[issueNumber] = vote;
+      window.localStorage.setItem("laredo-issue-votes", JSON.stringify(next));
+      return next;
     });
+    toast.success(
+      removingVote
+        ? language === "es" ? "Voto eliminado" : "Vote removed"
+        : language === "es" ? "Gracias por participar" : "Thanks for weighing in",
+    );
+  };
+
+  const handleAdInquiry = () => {
+    document.getElementById("advertise-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
   const handleBriefSignup = (event: FormEvent<HTMLFormElement>) => {
@@ -289,6 +343,33 @@ export default function Home() {
           ? "Conecta este formulario a tu CRM o plataforma de email en la siguiente fase."
           : "Connect this form to your CRM or email platform in the next phase.",
     });
+  };
+
+  const handleAdvertiserSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const business = String(data.get("business") || "Local business");
+    const subject = `Advertising inquiry — ${business}`;
+    const body = [
+      `Name: ${String(data.get("name") || "")}`,
+      `Business: ${business}`,
+      `Email: ${String(data.get("email") || "")}`,
+      `Phone: ${String(data.get("phone") || "")}`,
+      `Monthly budget: ${String(data.get("budget") || "")}`,
+      "",
+      "Promotion details:",
+      String(data.get("message") || ""),
+    ].join("\n");
+
+    toast.success(language === "es" ? "Solicitud lista para enviar" : "Your inquiry is ready", {
+      description:
+        language === "es"
+          ? "Se abrirá tu correo con toda la información preparada."
+          : "Your email app will open with all inquiry details prepared.",
+    });
+    window.location.href = `mailto:advertise@laredomayor.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    form.reset();
   };
 
   return (
@@ -520,6 +601,37 @@ export default function Home() {
                         <p className="relative text-[15px] font-medium leading-6 text-[#5b2c25]">{issue.bad[language]}</p>
                       </div>
                     </div>
+                    <div className="mt-5 flex flex-col gap-3 border-t border-[#102b36]/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
+                      <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#667679]">{t.votePrompt}</p>
+                      <div className="flex items-center gap-2" role="group" aria-label={t.votePrompt}>
+                        <button
+                          type="button"
+                          onClick={() => handleIssueVote(issue.number, "up")}
+                          aria-pressed={issueVotes[issue.number] === "up"}
+                          data-umami-event={`issue-${issue.number}-helpful`}
+                          className={`flex flex-1 items-center justify-center gap-2 border px-4 py-2.5 text-[9px] font-black uppercase tracking-[0.1em] transition duration-200 active:scale-[0.97] sm:flex-none ${
+                            issueVotes[issue.number] === "up"
+                              ? "border-[#245a48] bg-[#245a48] text-white"
+                              : "border-[#245a48]/25 bg-[#dce8df]/45 text-[#245a48] hover:border-[#245a48] hover:bg-[#dce8df]"
+                          }`}
+                        >
+                          <ThumbsUp className="h-3.5 w-3.5" /> {t.voteYes}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleIssueVote(issue.number, "down")}
+                          aria-pressed={issueVotes[issue.number] === "down"}
+                          data-umami-event={`issue-${issue.number}-needs-context`}
+                          className={`flex flex-1 items-center justify-center gap-2 border px-4 py-2.5 text-[9px] font-black uppercase tracking-[0.1em] transition duration-200 active:scale-[0.97] sm:flex-none ${
+                            issueVotes[issue.number] === "down"
+                              ? "border-[#a23f2e] bg-[#a23f2e] text-white"
+                              : "border-[#a23f2e]/25 bg-[#f4ded7]/45 text-[#a23f2e] hover:border-[#a23f2e] hover:bg-[#f4ded7]"
+                          }`}
+                        >
+                          <ThumbsDown className="h-3.5 w-3.5" /> {t.voteNo}
+                        </button>
+                      </div>
+                    </div>
                   </article>
                 ))}
               </div>
@@ -737,6 +849,66 @@ export default function Home() {
               >
                 {t.mediaKit} <ArrowRight className="h-4 w-4" />
               </button>
+            </div>
+
+            <div id="advertise-form" className="mt-16 scroll-mt-28 overflow-hidden bg-[#102b36] shadow-[0_24px_80px_rgba(16,43,54,0.18)]">
+              <div className="grid lg:grid-cols-[0.78fr_1.22fr]">
+                <div className="relative overflow-hidden border-b border-white/10 p-8 text-white sm:p-10 lg:border-b-0 lg:border-r">
+                  <div className="absolute -bottom-24 -right-20 h-64 w-64 rounded-full border-[40px] border-[#f0dfbd]/10" />
+                  <div className="absolute right-8 top-8 grid h-12 w-12 place-items-center rounded-full bg-[#e75037]">
+                    <Store className="h-5 w-5" />
+                  </div>
+                  <div className="relative flex h-full min-h-[330px] flex-col justify-between">
+                    <div>
+                      <p className="section-kicker section-kicker-light">{t.contactEyebrow}</p>
+                      <h3 className="mt-6 max-w-md font-display text-4xl font-black leading-[0.94] tracking-[-0.045em] sm:text-5xl">{t.contactTitle}</h3>
+                      <p className="mt-6 max-w-md text-sm leading-6 text-[#b9c9c7]">{t.contactText}</p>
+                    </div>
+                    <a href="mailto:advertise@laredomayor.com" className="relative mt-10 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.13em] text-[#f0dfbd] hover:text-white">
+                      <Mail className="h-4 w-4" /> advertise@laredomayor.com
+                    </a>
+                  </div>
+                </div>
+
+                <form onSubmit={handleAdvertiserSubmit} className="grid gap-5 bg-[#fbf8f1] p-8 sm:grid-cols-2 sm:p-10">
+                  <label className="grid gap-2 text-[9px] font-black uppercase tracking-[0.15em] text-[#41565b]">
+                    {t.name}
+                    <input name="name" required autoComplete="name" className="min-h-13 border border-[#102b36]/18 bg-white px-4 text-sm font-medium normal-case tracking-normal text-[#102b36] outline-none transition focus:border-[#e75037] focus:ring-2 focus:ring-[#e75037]/15" />
+                  </label>
+                  <label className="grid gap-2 text-[9px] font-black uppercase tracking-[0.15em] text-[#41565b]">
+                    {t.business}
+                    <input name="business" required autoComplete="organization" className="min-h-13 border border-[#102b36]/18 bg-white px-4 text-sm font-medium normal-case tracking-normal text-[#102b36] outline-none transition focus:border-[#e75037] focus:ring-2 focus:ring-[#e75037]/15" />
+                  </label>
+                  <label className="grid gap-2 text-[9px] font-black uppercase tracking-[0.15em] text-[#41565b]">
+                    {t.email}
+                    <input name="email" type="email" required autoComplete="email" className="min-h-13 border border-[#102b36]/18 bg-white px-4 text-sm font-medium normal-case tracking-normal text-[#102b36] outline-none transition focus:border-[#e75037] focus:ring-2 focus:ring-[#e75037]/15" />
+                  </label>
+                  <label className="grid gap-2 text-[9px] font-black uppercase tracking-[0.15em] text-[#41565b]">
+                    {t.phone}
+                    <input name="phone" type="tel" autoComplete="tel" className="min-h-13 border border-[#102b36]/18 bg-white px-4 text-sm font-medium normal-case tracking-normal text-[#102b36] outline-none transition focus:border-[#e75037] focus:ring-2 focus:ring-[#e75037]/15" />
+                  </label>
+                  <label className="grid gap-2 text-[9px] font-black uppercase tracking-[0.15em] text-[#41565b] sm:col-span-2">
+                    {t.budget}
+                    <select name="budget" required defaultValue="" className="min-h-13 border border-[#102b36]/18 bg-white px-4 text-sm font-medium normal-case tracking-normal text-[#102b36] outline-none transition focus:border-[#e75037] focus:ring-2 focus:ring-[#e75037]/15">
+                      <option value="" disabled>{t.chooseBudget}</option>
+                      <option value="$250–$500">$250–$500</option>
+                      <option value="$500–$1,000">$500–$1,000</option>
+                      <option value="$1,000–$2,500">$1,000–$2,500</option>
+                      <option value="$2,500+">$2,500+</option>
+                    </select>
+                  </label>
+                  <label className="grid gap-2 text-[9px] font-black uppercase tracking-[0.15em] text-[#41565b] sm:col-span-2">
+                    {t.message}
+                    <textarea name="message" required rows={4} className="resize-y border border-[#102b36]/18 bg-white p-4 text-sm font-medium normal-case leading-6 tracking-normal text-[#102b36] outline-none transition focus:border-[#e75037] focus:ring-2 focus:ring-[#e75037]/15" />
+                  </label>
+                  <div className="flex flex-col gap-4 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
+                    <p className="max-w-sm text-[10px] leading-4 text-[#738184]">{t.privacy}</p>
+                    <button type="submit" data-umami-event="advertiser-form-submit" className="flex min-h-13 items-center justify-center gap-3 bg-[#e75037] px-6 text-[10px] font-black uppercase tracking-[0.14em] text-white shadow-[4px_4px_0_#102b36] transition duration-200 hover:-translate-y-1 hover:shadow-[6px_6px_0_#102b36] active:scale-[0.97]">
+                      {t.send} <Send className="h-4 w-4" />
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </section>
