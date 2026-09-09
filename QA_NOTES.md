@@ -59,3 +59,9 @@ A final mobile screenshot pass confirmed that the supplied District 2 and Distri
 The homepage and both Election 2026 language hubs now place a full ballot snapshot directly below their hero/header. It lists the mayoral field; Districts 1, 2, 3 and 6; and Municipal Court Judge Position 1 with every supplied candidate name visible before a visitor opens a race guide. Desktop and mobile screenshots confirmed clean responsive presentation.
 
 All `mailto:` behavior was removed. Advertiser inquiries, The Laredo Brief signups, resource-page site-update signups, and correction/source forms submit via AJAX directly to `robertgray@gmail.com`. FormSubmit was activated by the recipient, a live endpoint test returned HTTP 200 and `success: true`, and Gmail search confirmed that both the final delivery test and newsletter test reached the destination inbox. Public UI does not expose the private Gmail address.
+
+## All eight City Council districts
+
+The City of Laredo's official 2026 General Election page confirms that only City Council Districts **1, 2, 3 and 6** are on the November 3, 2026 general-election ballot. The six publisher-supplied images correspond to Mayor, Districts 1/2/3/6, and Municipal Court Judge Position 1; no District 4/5/7/8 ballot-drawing boards were supplied because those four districts are not listed in this election cycle.
+
+The top district directory now includes **all eight districts**. Districts 1, 2, 3 and 6 display their 2026 candidates. Districts 4, 5, 7 and 8 display the current council member and a clear **Not on the 2026 general-election ballot** label. Desktop and mobile screenshots passed, and a live rendered-text check confirmed Districts 1–8 plus exactly four non-election labels.

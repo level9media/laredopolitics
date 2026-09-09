@@ -24,6 +24,13 @@ export const mayorBallot = {
   candidates: ["Victor D. Trevino", "JD Gonzalez", "Jorge A. Garza", "Poncho Casso", "Alyssa Cigarroa"],
 };
 
+export const nonElectionDistricts = [
+  { district: 4, currentMember: 'Ricardo “Rick” Garza' },
+  { district: 5, currentMember: "Ruben Gutierrez, Jr." },
+  { district: 7, currentMember: "Vanessa Perez" },
+  { district: 8, currentMember: "Alyssa Cigarroa" },
+] as const;
+
 export const localRaces: LocalRace[] = [
   {
     slug: "district-1",
