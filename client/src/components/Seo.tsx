@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 const SITE_URL = "https://laredopolitics.com";
-const DEFAULT_IMAGE = "/media/laredo-civic-hero_d774494e.jpg";
+const DEFAULT_IMAGE = "/media/laredo-downtown-hero_2026.webp";
 
 type SeoProps = {
   title: string;

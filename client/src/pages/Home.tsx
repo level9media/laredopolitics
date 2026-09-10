@@ -554,9 +554,12 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
       <main id="top">
         <section className="hero-section relative isolate min-h-[690px] overflow-hidden bg-[#0a2029] text-white lg:min-h-[790px]">
           <img
-            src="/media/laredo-civic-hero_d774494e.jpg"
-            alt="Editorial view of Laredo civic life at golden hour"
-            className="absolute inset-0 h-full w-full object-cover object-[64%_center]"
+            src="/media/laredo-downtown-hero_2026.webp"
+            srcSet="/media/laredo-downtown-hero-mobile_2026.webp 960w, /media/laredo-downtown-hero_2026.webp 1920w"
+            sizes="100vw"
+            alt="Downtown Laredo civic buildings and palm trees at blue hour"
+            fetchPriority="high"
+            className="absolute inset-0 h-full w-full object-cover object-[58%_42%]"
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,25,32,0.99)_0%,rgba(6,25,32,0.92)_36%,rgba(6,25,32,0.42)_68%,rgba(6,25,32,0.12)_100%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(6,25,32,0.9)_0%,transparent_35%)]" />
