@@ -23,6 +23,7 @@ import { toast } from "sonner";
 import Seo, { SITE_URL } from "@/components/Seo";
 import AdCarousel from "@/components/AdCarousel";
 import BallotSnapshot from "@/components/BallotSnapshot";
+import { sponsorPackages } from "@/data/sponsorships";
 import { submitDirectForm } from "@/lib/directForms";
 
 const candidates = [
@@ -217,17 +218,17 @@ const copy = {
     adLocal: "Tu negocio aquí",
     adDetail: "Presencia mensual · Audiencia local · Reporte de clics",
     rates: "Solicitar tarifas",
-    mediaKit: "Ver oportunidades",
+    mediaKit: "Ver precios y comprar",
     contactEyebrow: "Anúnciate con nosotros",
     contactTitle: "Pon tu negocio frente a los votantes de Laredo.",
     contactText:
-      "Cuéntanos qué quieres promover. Te enviaremos opciones de ubicación, precios y disponibilidad para este ciclo electoral.",
+      "Elige un paquete publicado o cuéntanos si necesitas un plan personalizado. Los paquetes estándar se pueden reservar ahora con Stripe.",
     name: "Tu nombre",
     business: "Nombre del negocio",
     email: "Correo electrónico",
     phone: "Teléfono (opcional)",
-    budget: "Presupuesto mensual",
-    chooseBudget: "Selecciona un rango",
+    budget: "Paquete de patrocinio",
+    chooseBudget: "Selecciona un paquete",
     message: "¿Qué quieres promocionar?",
     send: "Solicitar información",
     privacy: "Tu información se usa únicamente para responder a esta solicitud.",
@@ -294,17 +295,17 @@ const copy = {
     adLocal: "Your business here",
     adDetail: "Monthly presence · Local audience · Click reporting",
     rates: "Request rates",
-    mediaKit: "View opportunities",
+    mediaKit: "View rates and buy",
     contactEyebrow: "Advertise with us",
     contactTitle: "Put your business in front of Laredo voters.",
     contactText:
-      "Tell us what you want to promote. We will send placement options, pricing and availability for this election cycle.",
+      "Choose a published package or tell us if you need a custom plan. Standard packages can be reserved now through Stripe.",
     name: "Your name",
     business: "Business name",
     email: "Email address",
     phone: "Phone (optional)",
-    budget: "Monthly budget",
-    chooseBudget: "Choose a range",
+    budget: "Sponsorship package",
+    chooseBudget: "Choose a package",
     message: "What do you want to promote?",
     send: "Request advertising info",
     privacy: "Your information is used only to respond to this inquiry.",
@@ -370,10 +371,6 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
     );
   };
 
-  const handleAdInquiry = () => {
-    document.getElementById("advertise-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
-  };
-
   const handleBriefSignup = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -411,7 +408,7 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
         business,
         email: String(data.get("email") || ""),
         phone: String(data.get("phone") || ""),
-        monthly_budget: String(data.get("budget") || ""),
+        sponsor_package: String(data.get("package") || ""),
         promotion_details: String(data.get("message") || ""),
         language,
       });
@@ -865,14 +862,13 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
                   <p className="mt-1 text-sm leading-6 text-[#617174]">{language === "en" ? "Audience, placement options, editorial firewall and monthly reporting." : "Audiencia, opciones de ubicación, separación editorial y reportes mensuales."}</p>
                 </div>
               </div>
-              <button
-                type="button"
-                onClick={handleAdInquiry}
+              <a
+                href={language === "es" ? "/es/anunciate#rate-card" : "/advertise#rate-card"}
                 data-umami-event="media-kit-request"
                 className="flex items-center justify-center gap-3 bg-[#e75037] px-6 py-4 text-[10px] font-black uppercase tracking-[0.14em] text-white shadow-[4px_4px_0_#102b36] transition hover:-translate-y-1 hover:shadow-[6px_6px_0_#102b36] active:scale-[0.97]"
               >
                 {t.mediaKit} <ArrowRight className="h-4 w-4" />
-              </button>
+              </a>
             </div>
 
             <div id="advertise-form" className="mt-16 scroll-mt-28 overflow-hidden bg-[#102b36] shadow-[0_24px_80px_rgba(16,43,54,0.18)]">
@@ -913,12 +909,10 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
                   </label>
                   <label className="grid gap-2 text-[9px] font-black uppercase tracking-[0.15em] text-[#41565b] sm:col-span-2">
                     {t.budget}
-                    <select name="budget" required defaultValue="" className="min-h-13 border border-[#102b36]/18 bg-white px-4 text-sm font-medium normal-case tracking-normal text-[#102b36] outline-none transition focus:border-[#e75037] focus:ring-2 focus:ring-[#e75037]/15">
+                    <select name="package" required defaultValue="" className="min-h-13 border border-[#102b36]/18 bg-white px-4 text-sm font-medium normal-case tracking-normal text-[#102b36] outline-none transition focus:border-[#e75037] focus:ring-2 focus:ring-[#e75037]/15">
                       <option value="" disabled>{t.chooseBudget}</option>
-                      <option value="$250–$500">$250–$500</option>
-                      <option value="$500–$1,000">$500–$1,000</option>
-                      <option value="$1,000–$2,500">$1,000–$2,500</option>
-                      <option value="$2,500+">$2,500+</option>
+                      {sponsorPackages.map((item) => <option key={item.id} value={item.id}>{item.shortName[language]}</option>)}
+                      <option value="custom">{language === "es" ? "Paquete personalizado" : "Custom package"}</option>
                     </select>
                   </label>
                   <label className="grid gap-2 text-[9px] font-black uppercase tracking-[0.15em] text-[#41565b] sm:col-span-2">

@@ -7,7 +7,8 @@ const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "
 const outputRoot = path.join(projectRoot, "dist", "public");
 const sitemap = await readFile(path.join(projectRoot, "client", "public", "sitemap.xml"), "utf8");
 const template = await readFile(path.join(outputRoot, "index.html"), "utf8");
-const routes = Array.from(sitemap.matchAll(/<loc>https:\/\/laredopolitics\.com([^<]*)<\/loc>/g), (match) => match[1] || "/");
+const sitemapRoutes = Array.from(sitemap.matchAll(/<loc>https:\/\/laredopolitics\.com([^<]*)<\/loc>/g), (match) => match[1] || "/");
+const routes = [...new Set([...sitemapRoutes, "/advertise/success"])];
 
 if (!routes.length) throw new Error("No laredopolitics.com routes found in sitemap.");
 
@@ -18,7 +19,7 @@ function escapeHtml(value) {
 function cleanHead(html) {
   return html
     .replace(/<title>[\s\S]*?<\/title>/gi, "")
-    .replace(/\s*<meta\s+(?:name|property)=["'](?:description|keywords|og:title|og:description|og:type|og:locale|og:url|og:image|twitter:title|twitter:description|twitter:image)["'][^>]*>/gi, "")
+    .replace(/\s*<meta\s+(?:name|property)=["'](?:description|keywords|robots|og:title|og:description|og:type|og:locale|og:url|og:image|twitter:title|twitter:description|twitter:image)["'][^>]*>/gi, "")
     .replace(/\s*<link\s+rel=["'](?:canonical|alternate)["'][^>]*>/gi, "")
     .replace(/\s*<script\s+id=["']page-json-ld["'][\s\S]*?<\/script>/gi, "");
 }
@@ -32,6 +33,7 @@ function metadataBlock(seo) {
     `<title>${escapeHtml(seo.fullTitle)}</title>`,
     `<meta name="description" content="${escapeHtml(seo.description)}">`,
     `<meta name="keywords" content="${escapeHtml(keywords)}">`,
+    `<meta name="robots" content="${seo.noIndex ? "noindex, nofollow" : "index, follow, max-image-preview:large"}">`,
     `<link rel="canonical" href="${escapeHtml(seo.canonical)}">`,
     `<link rel="alternate" hreflang="${seo.language}" href="${escapeHtml(seo.canonical)}">`,
     `<link rel="alternate" hreflang="${alternateLanguage}" href="${escapeHtml(seo.alternateUrl)}">`,

@@ -13,6 +13,7 @@ type SeoProps = {
   type?: "website" | "article";
   keywords?: string[];
   schema?: Record<string, unknown> | Array<Record<string, unknown>>;
+  noIndex?: boolean;
 };
 
 type PrerenderSeo = {
@@ -25,6 +26,7 @@ type PrerenderSeo = {
   type: "website" | "article";
   keywords: string[];
   schema?: Record<string, unknown> | Array<Record<string, unknown>>;
+  noIndex?: boolean;
 };
 
 function upsertMeta(selector: string, attribute: "name" | "property", value: string, content: string) {
@@ -37,13 +39,13 @@ function upsertMeta(selector: string, attribute: "name" | "property", value: str
   element.content = content;
 }
 
-export default function Seo({ title, description, path, language = "en", alternatePath, image, type = "website", keywords = [], schema }: SeoProps) {
+export default function Seo({ title, description, path, language = "en", alternatePath, image, type = "website", keywords = [], schema, noIndex = false }: SeoProps) {
   const fullTitle = title.includes("Laredo Politics") ? title : `${title} | Laredo Politics`;
   const canonical = `${SITE_URL}${path === "/" ? "" : path}`;
   const socialImage = image ? (image.startsWith("http") ? image : `${SITE_URL}${image}`) : `${SITE_URL}${DEFAULT_IMAGE}`;
   const resolvedAlternatePath = alternatePath ?? (language === "es" ? (path.replace(/^\/es/, "") || "/") : `/es${path === "/" ? "" : path}`);
   const alternateUrl = `${SITE_URL}${resolvedAlternatePath}`;
-  const prerenderSeo: PrerenderSeo = { fullTitle, description, canonical, socialImage, language, alternateUrl, type, keywords, schema };
+  const prerenderSeo: PrerenderSeo = { fullTitle, description, canonical, socialImage, language, alternateUrl, type, keywords, schema, noIndex };
 
   useEffect(() => {
     document.title = fullTitle;
@@ -51,6 +53,7 @@ export default function Seo({ title, description, path, language = "en", alterna
 
     upsertMeta('meta[name="description"]', "name", "description", description);
     upsertMeta('meta[name="keywords"]', "name", "keywords", keywords.join(", "));
+    upsertMeta('meta[name="robots"]', "name", "robots", noIndex ? "noindex, nofollow" : "index, follow, max-image-preview:large");
     upsertMeta('meta[property="og:title"]', "property", "og:title", fullTitle);
     upsertMeta('meta[property="og:description"]', "property", "og:description", description);
     upsertMeta('meta[property="og:type"]', "property", "og:type", type);
@@ -97,7 +100,7 @@ export default function Seo({ title, description, path, language = "en", alterna
       document.getElementById("page-json-ld")?.remove();
       document.querySelectorAll('link[data-laredo-hreflang="true"]').forEach((element) => element.remove());
     };
-  }, [alternateUrl, canonical, description, fullTitle, keywords, language, schema, socialImage, type]);
+  }, [alternateUrl, canonical, description, fullTitle, keywords, language, noIndex, schema, socialImage, type]);
 
   return <script type="application/json" data-prerender-seo="true" suppressHydrationWarning dangerouslySetInnerHTML={{ __html: JSON.stringify(prerenderSeo).replaceAll("<", "\\u003c") }} />;
 }

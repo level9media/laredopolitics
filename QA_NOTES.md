@@ -96,3 +96,7 @@ The live Where to Vote page loaded all **8 Plan E district placemarks** from the
 
 The live Advertise With Us report passed its primary checks: the **10,000–50,000 local people per week** positioning is visible; the page explicitly states that this is a launch target rather than measured historical traffic; the six-advertiser rotation cap is disclosed; the eight-field inquiry form sends directly without opening an email client; and Service structured data plus the `/advertise` canonical are present. The initial automated month check was case-sensitive despite all seven chart labels being visible, so a case-insensitive retest remained.
 The corrected chart check passed: all seven month labels from **March through September** and every planning value from **10K to 50K** are present.
+
+## Supplied advertising rate sheet — September 9, 2026
+
+Desktop (1440 × 1000) and mobile (390 × 844) full-page captures passed for `/advertise`, `/es/anunciate`, and the homepage. The English and Spanish rate pages now follow the publisher-supplied structure: final-stretch hero, four-row summary table, Small Square ($150/week), Banner ($250/week), Non-Rotating ($500/week), $1,500 Election Day Lock-In, $225 Laredo Brief sponsorship, and three fulfillment steps. The cards, pricing, buttons, lock-in module, newsletter module, tables, header, newsletter band, and footer all remain readable and balanced at both viewport sizes. The homepage still renders its advertiser inquiry section and now uses named rate-sheet products rather than generic budget ranges.

@@ -31,6 +31,7 @@ const LocalCandidateProfilePage = lazy(() => import("./pages/LocalCandidateProfi
 const CampaignFinanceDashboard = lazy(() => import("./pages/CampaignFinanceDashboard"));
 const WhereToVote = lazy(() => import("./pages/WhereToVote"));
 const Advertise = lazy(() => import("./pages/Advertise"));
+const SponsorCheckoutSuccess = lazy(() => import("./pages/SponsorCheckoutSuccess"));
 
 function ScrollToTop() {
   const [location] = useLocation();
@@ -63,6 +64,7 @@ function Router() {
         <Route path="/campaign-finance">{() => <CampaignFinanceDashboard language="en" />}</Route>
         <Route path="/finanzas-de-campana">{() => <CampaignFinanceDashboard language="en" />}</Route>
         <Route path="/where-to-vote">{() => <WhereToVote language="en" />}</Route>
+        <Route path="/advertise/success" component={SponsorCheckoutSuccess} />
         <Route path="/advertise">{() => <Advertise language="en" />}</Route>
         <Route path="/verificacion-de-datos">{() => <EnglishStaticResourcePage kind="facts" />}</Route>
         <Route path="/metodologia">{() => <EnglishStaticResourcePage kind="methodology" />}</Route>

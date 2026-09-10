@@ -39,18 +39,18 @@ export default function AdCarousel({ placement = "resource", compact = false, la
 
   if (!ad) return null;
   const spanishPlaceholders: Record<string, { name: string; tagline: string; cta: string }> = {
-    "presenting-available": { name: "Patrocinador principal", tagline: "Domina el espacio de mayor visibilidad en todo Laredo Politics.", cta: "Reservar este espacio" },
-    "local-business-available": { name: "Negocio local destacado", tagline: "Llega a votantes comprometidos de Laredo con un mensaje local claramente identificado.", cta: "Ver opciones publicitarias" },
-    "professional-services-available": { name: "Servicios profesionales", tagline: "Un espacio rotativo premium para firmas locales de confianza.", cta: "Solicitar disponibilidad" },
-    "community-brand-available": { name: "Marca comunitaria", tagline: "Mantén tu negocio visible junto a los temas que más sigue Laredo.", cta: "Solicitar el media kit" },
-    "homepage-feature-available": { name: "Espacio destacado en portada", tagline: "Visibilidad de alto impacto dentro de la experiencia cívica principal.", cta: "Reservar el destacado" },
-    "election-brief-available": { name: "Patrocinador del brief electoral", tagline: "Combina visibilidad en portada con presencia en el correo semanal de Laredo.", cta: "Preguntar por el paquete" },
+    "presenting-available": { name: "Ubicación sin rotación", tagline: "Un solo anunciante en la posición de mayor visibilidad del sitio.", cta: "Ver precio y reservar" },
+    "local-business-available": { name: "Cuadro pequeño", tagline: "Llega a residentes de Laredo en una de sólo seis posiciones de rotación.", cta: "Ver precio y reservar" },
+    "professional-services-available": { name: "Banner", tagline: "Un formato más ancho y visible que rota con hasta cinco patrocinadores.", cta: "Ver precios" },
+    "community-brand-available": { name: "Socio comercial local", tagline: "Mantén tu negocio visible junto a los temas que más sigue Laredo.", cta: "Ver la tarjeta de precios" },
+    "homepage-feature-available": { name: "Paquete hasta el Día de Elección", tagline: "Asegura la ubicación sin rotación hasta el 3 de noviembre con un solo pago.", cta: "Asegurar paquete" },
+    "election-brief-available": { name: "Patrocinador del Brief de Laredo", tagline: "Un solo patrocinador destacado en un envío programado del newsletter.", cta: "Reservar un envío" },
   };
   const localizedAd = language === "es" && ad.available ? spanishPlaceholders[ad.id] : undefined;
   const adName = localizedAd?.name || ad.businessName;
   const adTagline = localizedAd?.tagline || ad.tagline;
   const adCta = localizedAd?.cta || ad.cta;
-  const adHref = language === "es" && ad.href === "/#advertise-form" ? "/es#advertise-form" : ad.href;
+  const adHref = language === "es" && ad.href === "/advertise#rate-card" ? "/es/anunciate#rate-card" : ad.href;
   const labels = language === "es"
     ? { paid: "Publicidad", available: "Espacio disponible", previous: "Anuncio anterior", next: "Siguiente anuncio", count: "anunciantes en rotación" }
     : { paid: "Advertisement", available: "Space available", previous: "Previous ad", next: "Next ad", count: "advertisers in rotation" };
