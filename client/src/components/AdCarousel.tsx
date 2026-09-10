@@ -54,6 +54,51 @@ export default function AdCarousel({ placement = "resource", compact = false, la
   const labels = language === "es"
     ? { paid: "Publicidad", available: "Espacio disponible", previous: "Anuncio anterior", next: "Siguiente anuncio", count: "anunciantes en rotación" }
     : { paid: "Advertisement", available: "Space available", previous: "Previous ad", next: "Next ad", count: "advertisers in rotation" };
+  const isExternal = /^https?:\/\//.test(adHref);
+  const trackAdClick = () => {
+    const trackedWindow = window as Window & { dataLayer?: Array<Record<string, unknown>> };
+    trackedWindow.dataLayer = trackedWindow.dataLayer || [];
+    trackedWindow.dataLayer.push({ event: "ad_click", advertiser_id: ad.id, ad_placement: placement, link_url: adHref });
+  };
+
+  if (ad.image && !ad.available) {
+    return (
+      <section
+        className="group relative aspect-[1609/657] min-h-44 overflow-hidden border border-[#102b36]/15 bg-[#062531] shadow-[0_18px_50px_rgba(16,43,54,0.14)]"
+        aria-label={`${labels.paid}: ${adName}`}
+        aria-roledescription="carousel"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onFocus={() => setPaused(true)}
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) setPaused(false);
+        }}
+      >
+        <a
+          href={adHref}
+          target={isExternal ? "_blank" : undefined}
+          rel={isExternal ? "sponsored noopener noreferrer" : undefined}
+          aria-label={`${adCta} — ${adName}`}
+          data-umami-event={`ad-click-${ad.id}`}
+          onClick={trackAdClick}
+          className="absolute inset-0 block focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-[-4px] focus-visible:outline-[#f0dfbd]"
+        >
+          <img src={ad.image} alt={`${adName}: ${adTagline}`} className="h-full w-full object-contain" />
+        </a>
+        <span className="pointer-events-none absolute left-3 top-3 z-10 bg-[#a6192e] px-2.5 py-1 text-[8px] font-black uppercase tracking-[0.16em] text-white shadow-lg sm:left-5 sm:top-5">
+          {labels.paid}
+        </span>
+        <div className="absolute inset-x-0 bottom-0 z-10 flex items-center justify-between bg-gradient-to-t from-[#071b23]/90 via-[#071b23]/55 to-transparent px-3 pb-3 pt-10 sm:px-5 sm:pb-5">
+          <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-white/80">{slides.length} {labels.count}</span>
+          <div className="flex items-center gap-2">
+            <button type="button" aria-label={labels.previous} onClick={() => setCurrent((index) => (index - 1 + slides.length) % slides.length)} className="grid h-9 w-9 place-items-center border border-white/35 bg-[#071b23]/65 text-white transition hover:border-[#f0dfbd] hover:text-[#f0dfbd] active:scale-[0.96]"><ArrowLeft className="h-4 w-4" /></button>
+            <span className="min-w-11 text-center font-mono text-[9px] text-white">{String(current + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}</span>
+            <button type="button" aria-label={labels.next} onClick={() => setCurrent((index) => (index + 1) % slides.length)} className="grid h-9 w-9 place-items-center border border-white/35 bg-[#071b23]/65 text-white transition hover:border-[#f0dfbd] hover:text-[#f0dfbd] active:scale-[0.96]"><ArrowRight className="h-4 w-4" /></button>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section
@@ -84,12 +129,10 @@ export default function AdCarousel({ placement = "resource", compact = false, la
           <p className={`mt-3 max-w-xl leading-6 text-[#c0d0cd] ${compact ? "text-xs" : "text-sm"}`}>{adTagline}</p>
           <a
             href={adHref}
+            target={isExternal ? "_blank" : undefined}
+            rel={isExternal ? "sponsored noopener noreferrer" : undefined}
             data-umami-event={`ad-click-${ad.id}`}
-            onClick={() => {
-              const trackedWindow = window as Window & { dataLayer?: Array<Record<string, unknown>> };
-              trackedWindow.dataLayer = trackedWindow.dataLayer || [];
-              trackedWindow.dataLayer.push({ event: "ad_click", advertiser_id: ad.id, ad_placement: placement, link_url: adHref });
-            }}
+            onClick={trackAdClick}
             className="mt-6 inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.13em] text-[#f0dfbd] transition hover:text-white"
           >
             {adCta} <ArrowRight className="h-4 w-4" />

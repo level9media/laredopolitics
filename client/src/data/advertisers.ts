@@ -21,6 +21,17 @@ export type Advertiser = {
  */
 export const advertisers: Advertiser[] = [
   {
+    id: "ibc-bank-business-banking",
+    businessName: "IBC Bank",
+    tagline: "Business banking that supports Laredo businesses, every day.",
+    cta: "Open an account today",
+    href: "https://www.ibc.com/business",
+    image: "/media/ibc-bank-laredo-business-ad_2026.webp",
+    placement: "sitewide",
+    accent: "#a6192e",
+    active: true,
+  },
+  {
     id: "presenting-available",
     businessName: "Non-rotating placement",
     tagline: "One advertiser only in the highest-visibility sitewide position.",
