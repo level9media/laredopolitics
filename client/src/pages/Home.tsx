@@ -829,7 +829,7 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
 
         <section className="relative isolate overflow-hidden bg-[#0c2630] py-28 text-white sm:py-36">
           <img
-            src="/media/rio-grande-editorial_2e0661fc.jpg"
+            src="/media/rio-grande-editorial-optimized_2026.webp"
             alt="Editorial landscape of the Rio Grande near Laredo"
             className="absolute inset-0 h-full w-full object-cover"
           />
