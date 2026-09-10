@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Layers3, Loader2, MapPinned } from "lucide-react";
 import { MapView } from "@/components/Map";
 
-const KML_PATH = "/manus-storage/plan-e-adopted_4643810f.kml";
+const KML_PATH = "/media/plan-e-adopted_4643810f.kml";
 const colors = ["#e75037", "#1f7a68", "#d49a28", "#8e5ea2", "#367ba5", "#d0648f", "#6f8b3d", "#ad613c"];
 
 type Language = "en" | "es";

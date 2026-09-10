@@ -30,9 +30,12 @@ export default function AdCarousel({ placement = "resource", compact = false, la
 
   useEffect(() => {
     if (!ad || document.visibilityState !== "visible") return;
-    const analytics = (window as Window & { umami?: { track: (event: string, data?: Record<string, string>) => void } }).umami;
+    const trackedWindow = window as Window & { dataLayer?: Array<Record<string, unknown>>; umami?: { track: (event: string, data?: Record<string, string>) => void } };
+    trackedWindow.dataLayer = trackedWindow.dataLayer || [];
+    trackedWindow.dataLayer.push({ event: "ad_impression", advertiser_id: ad.id, ad_placement: placement, ad_position: current + 1 });
+    const analytics = trackedWindow.umami;
     analytics?.track("ad-impression", { advertiser: ad.id, placement });
-  }, [ad, placement]);
+  }, [ad, current, placement]);
 
   if (!ad) return null;
   const spanishPlaceholders: Record<string, { name: string; tagline: string; cta: string }> = {
@@ -82,6 +85,11 @@ export default function AdCarousel({ placement = "resource", compact = false, la
           <a
             href={adHref}
             data-umami-event={`ad-click-${ad.id}`}
+            onClick={() => {
+              const trackedWindow = window as Window & { dataLayer?: Array<Record<string, unknown>> };
+              trackedWindow.dataLayer = trackedWindow.dataLayer || [];
+              trackedWindow.dataLayer.push({ event: "ad_click", advertiser_id: ad.id, ad_placement: placement, link_url: adHref });
+            }}
             className="mt-6 inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.13em] text-[#f0dfbd] transition hover:text-white"
           >
             {adCta} <ArrowRight className="h-4 w-4" />

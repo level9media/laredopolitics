@@ -3,7 +3,7 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import fs from "node:fs";
 import path from "node:path";
-import { defineConfig, type Plugin, type ViteDevServer } from "vite";
+import { defineConfig, loadEnv, type Plugin, type ViteDevServer } from "vite";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
 
 // =============================================================================
@@ -203,10 +203,51 @@ function vitePluginStorageProxy(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginStorageProxy()];
+function vitePluginGoogleTracking(mode: string): Plugin {
+  const env = loadEnv(mode, PROJECT_ROOT, "");
+  const gtmId = env.VITE_GTM_ID?.trim() || "GTM-M9CDW5XM";
+  const ga4Id = env.VITE_GA4_ID?.trim() || "G-9WGMJ7KKT3";
+  const verification = env.VITE_GOOGLE_SITE_VERIFICATION?.trim();
 
-export default defineConfig({
-  plugins,
+  return {
+    name: "laredo-politics-google-tracking",
+    transformIndexHtml() {
+      const injected: Array<{ tag: string; attrs?: Record<string, string | boolean>; children?: string; injectTo: "head" | "body-prepend" }> = [];
+
+      if (verification) {
+        injected.push({ tag: "meta", attrs: { name: "google-site-verification", content: verification }, injectTo: "head" });
+      }
+
+      if (gtmId) {
+        injected.push({
+          tag: "script",
+          attrs: { id: "laredo-politics-gtm" },
+          children: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${gtmId}');`,
+          injectTo: "head",
+        });
+        injected.push({
+          tag: "noscript",
+          children: `<iframe src="https://www.googletagmanager.com/ns.html?id=${gtmId}" height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe>`,
+          injectTo: "body-prepend",
+        });
+      } else if (ga4Id) {
+        injected.push({ tag: "script", attrs: { async: true, src: `https://www.googletagmanager.com/gtag/js?id=${ga4Id}` }, injectTo: "head" });
+        injected.push({
+          tag: "script",
+          attrs: { id: "laredo-politics-ga4" },
+          children: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${ga4Id}',{send_page_view:false});`,
+          injectTo: "head",
+        });
+      }
+
+      return injected;
+    },
+  };
+}
+
+export default defineConfig(({ mode }) => ({
+  plugins: [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginStorageProxy(), vitePluginGoogleTracking(mode)],
+
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),
@@ -238,4 +279,4 @@ export default defineConfig({
       deny: ["**/.*"],
     },
   },
-});
+}));

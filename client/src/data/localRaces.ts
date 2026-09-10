@@ -24,7 +24,7 @@ export type LocalRace = {
 export const officialCandidateSourceUrl = "https://www.cityoflaredo.com/departments/elections/2026-candidates-information";
 
 export const mayorBallot = {
-  evidenceImage: "/manus-storage/mayor_22040f78.webp",
+  evidenceImage: "/media/mayor_22040f78.webp",
   candidates: [
     { fullName: "Victor Daniel Trevino", ballotName: "Victor D. Trevino", campaignTreasurer: "Victor D. Trevino", treasurerUrl: "https://www.cityoflaredo.com/home/showpublisheddocument/24434/639244512374809563", applicationUrl: "https://www.cityoflaredo.com/home/showpublisheddocument/24097/639216280176900000" },
     { fullName: "Jose David Gonzalez", ballotName: "JD Gonzalez", campaignTreasurer: "Sonia Villarreal", treasurerUrl: "https://www.cityoflaredo.com/home/showpublisheddocument/23926/639203242118170000", applicationUrl: "https://www.cityoflaredo.com/home/showpublisheddocument/23928/639203245618530000" },
@@ -45,7 +45,7 @@ export const localRaces: LocalRace[] = [
     slug: "district-1",
     type: "district",
     district: 1,
-    evidenceImage: "/manus-storage/district-1_48024060.webp",
+    evidenceImage: "/media/district-1_48024060.webp",
     verificationStatus: "verified",
     title: { en: "Laredo City Council District 1", es: "Distrito 1 del Concejo Municipal de Laredo" },
     shortTitle: { en: "District 1", es: "Distrito 1" },
@@ -61,7 +61,7 @@ export const localRaces: LocalRace[] = [
     slug: "district-2",
     type: "district",
     district: 2,
-    evidenceImage: "/manus-storage/district-2_f511286b.webp",
+    evidenceImage: "/media/district-2_f511286b.webp",
     verificationStatus: "verified",
     title: { en: "Laredo City Council District 2", es: "Distrito 2 del Concejo Municipal de Laredo" },
     shortTitle: { en: "District 2", es: "Distrito 2" },
@@ -77,7 +77,7 @@ export const localRaces: LocalRace[] = [
     slug: "district-3",
     type: "district",
     district: 3,
-    evidenceImage: "/manus-storage/district-3_8133d279.webp",
+    evidenceImage: "/media/district-3_8133d279.webp",
     verificationStatus: "verified",
     title: { en: "Laredo City Council District 3", es: "Distrito 3 del Concejo Municipal de Laredo" },
     shortTitle: { en: "District 3", es: "Distrito 3" },
@@ -108,7 +108,7 @@ export const localRaces: LocalRace[] = [
   {
     slug: "municipal-court-judge",
     type: "citywide",
-    evidenceImage: "/manus-storage/municipal-court-judge_e93eea5a.webp",
+    evidenceImage: "/media/municipal-court-judge_e93eea5a.webp",
     verificationStatus: "verified",
     title: { en: "Laredo Municipal Court Judge, Position 1", es: "Juez del Tribunal Municipal de Laredo, Puesto 1" },
     shortTitle: { en: "Municipal Court Judge", es: "Juez Municipal" },

@@ -1,0 +1,58 @@
+name: Validate and deploy Laredo Politics
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloudflare-pages-production
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.4.1
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run regression tests
+        run: pnpm vitest run
+
+      - name: Type-check
+        run: pnpm check
+
+      - name: Build pre-rendered site
+        run: pnpm build:pages
+
+      - name: Verify static SEO output
+        run: node scripts/verify_prerender.mjs
+
+      - name: Verify sitemap routes
+        run: node scripts/check_routes.mjs
+
+      - name: Deploy to Cloudflare Pages
+        if: ${{ vars.CLOUDFLARE_DEPLOY_ENABLED == 'true' }}
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist/public --project-name=laredo-politics --branch=main

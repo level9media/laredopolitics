@@ -103,7 +103,7 @@ export default function WhereToVote({ language = "en" }: { language?: Language }
         <div className="grain absolute inset-0 opacity-20" />
         <div className="container relative">
           <p className="section-kicker section-kicker-light">{t.eyebrow}</p>
-          <h1 className="mt-6 max-w-5xl font-display text-[clamp(3.4rem,8vw,7.2rem)] font-black leading-[0.86] tracking-[-0.07em]">{t.title}</h1>
+          <h1 className="mt-6 max-w-6xl text-balance font-display text-[clamp(3.2rem,7.4vw,7rem)] font-black leading-[0.98] tracking-[-0.055em] sm:leading-[0.94]">{t.title}</h1>
           <p className="mt-7 max-w-3xl border-l-2 border-[#e75037] pl-5 text-base leading-7 text-[#cad7d4] sm:text-lg">{t.intro}</p>
           <div className="mt-8 flex flex-wrap gap-3"><a href={links.voterPortal} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center gap-3 bg-[#e75037] px-5 text-[9px] font-black uppercase tracking-[0.12em]">{t.portal}<ArrowUpRight className="h-4 w-4" /></a><a href={links.webb} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center gap-3 border border-white/20 px-5 text-[9px] font-black uppercase tracking-[0.12em]">{t.county}<ArrowUpRight className="h-4 w-4" /></a></div>
         </div>

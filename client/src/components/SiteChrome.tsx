@@ -59,7 +59,7 @@ export function Logo({ inverted = false, language = "en" }: { inverted?: boolean
   const t = chromeCopy[language];
   return (
     <span className="flex items-center gap-3">
-      <span className="brand-mark" aria-hidden="true"><img src="/manus-storage/laredo-texas-logo_e7a4842a.png" alt="" /></span>
+      <span className="brand-mark" aria-hidden="true"><img src="/media/laredo-texas-logo_e7a4842a.png" alt="" /></span>
       <span>
         <span className={`block font-display text-[18px] font-black leading-none tracking-[-0.045em] sm:text-[22px] ${inverted ? "text-white" : "text-[#102b36]"}`}>LAREDO<span className="text-[#e75037]">POLITICS</span></span>
         <span className={`mt-1 block text-[7px] font-extrabold uppercase tracking-[0.25em] sm:text-[8px] ${inverted ? "text-[#9eb3b0]" : "text-[#66777a]"}`}>{t.tagline}</span>

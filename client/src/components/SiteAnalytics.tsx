@@ -2,11 +2,13 @@ import { useEffect } from "react";
 import { useLocation } from "wouter";
 
 const viteEnvironment = (import.meta as ImportMeta & { env?: Record<string, string> }).env || {};
-const GTM_ID = viteEnvironment.VITE_GTM_ID?.trim();
+const GTM_ID = viteEnvironment.VITE_GTM_ID?.trim() || "GTM-M9CDW5XM";
+const GA4_ID = viteEnvironment.VITE_GA4_ID?.trim() || "G-9WGMJ7KKT3";
 
 declare global {
   interface Window {
     dataLayer?: Array<Record<string, unknown>>;
+    gtag?: (...args: unknown[]) => void;
   }
 }
 
@@ -30,11 +32,19 @@ export default function SiteAnalytics() {
   }, []);
 
   useEffect(() => {
-    pushEvent({
-      event: "virtual_page_view",
+    const page = {
       page_path: location,
       page_title: document.title,
       page_language: document.documentElement.lang || "en",
+      page_location: window.location.href,
+    };
+
+    window.requestAnimationFrame(() => {
+      if (!GTM_ID && GA4_ID && window.gtag) {
+        window.gtag("event", "page_view", page);
+        return;
+      }
+      pushEvent({ event: "virtual_page_view", ...page });
     });
   }, [location]);
 

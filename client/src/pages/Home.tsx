@@ -31,7 +31,7 @@ const candidates = [
     initial: "C",
     name: 'Alfonso “Poncho” Casso',
     ballot: "Poncho Casso",
-    photoUrl: "/manus-storage/poncho-casso_12b48698.webp",
+    photoUrl: "/media/poncho-casso_12b48698.webp",
     detail: {
       es: "Exconcejal y empresario local. Su campaña de 2026 se concentra en rendición de cuentas, transparencia, seguridad del agua y comercio internacional.",
       en: "Former council member and local businessman. His 2026 campaign centers on accountability, transparency, water security, and international trade.",
@@ -43,7 +43,7 @@ const candidates = [
     initial: "C",
     name: "Alyssa Cigarroa",
     ballot: "Alyssa Cigarroa",
-    photoUrl: "/manus-storage/alyssa-cigarroa_e25ad183.webp",
+    photoUrl: "/media/alyssa-cigarroa_e25ad183.webp",
     detail: {
       es: "Representa al Distrito VIII desde 2020 y cofundó Cultivarte. Su campaña destaca preparación ante crisis, vivienda y participación pública.",
       en: "District VIII council member since 2020 and Cultivarte co-founder. Her campaign highlights crisis readiness, housing and public participation.",
@@ -55,7 +55,7 @@ const candidates = [
     initial: "G",
     name: "JD Gonzalez",
     ballot: "JD Gonzalez",
-    photoUrl: "/manus-storage/jd-gonzalez_2ce6ae85.webp",
+    photoUrl: "/media/jd-gonzalez_2ce6ae85.webp",
     detail: {
       es: "Veterano de diez años de la Marina con experiencia en comercio internacional. Su campaña se enfoca en calles, agua, seguridad y oportunidades.",
       en: "A ten-year Navy veteran with an international trade background. His campaign focuses on roads, water, safety and economic opportunity.",
@@ -79,7 +79,7 @@ const candidates = [
     initial: "T",
     name: "Dr. Victor D. Treviño",
     ballot: "Victor D. Trevino",
-    photoUrl: "/manus-storage/victor-trevino_7c486ac0.webp",
+    photoUrl: "/media/victor-trevino_7c486ac0.webp",
     incumbent: true,
     detail: {
       es: "Médico, exautoridad de salud y alcalde desde 2022. Busca un segundo mandato destacando inversión en agua, seguridad y acceso a salud.",
@@ -320,7 +320,7 @@ type Language = keyof typeof copy;
 function EditorialMark() {
   return (
     <span className="brand-mark" aria-hidden="true">
-      <img src="/manus-storage/laredo-texas-logo_e7a4842a.png" alt="" />
+      <img src="/media/laredo-texas-logo_e7a4842a.png" alt="" />
     </span>
   );
 }
@@ -554,7 +554,7 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
       <main id="top">
         <section className="hero-section relative isolate min-h-[690px] overflow-hidden bg-[#0a2029] text-white lg:min-h-[790px]">
           <img
-            src="/manus-storage/laredo-civic-hero_d774494e.jpg"
+            src="/media/laredo-civic-hero_d774494e.jpg"
             alt="Editorial view of Laredo civic life at golden hour"
             className="absolute inset-0 h-full w-full object-cover object-[64%_center]"
           />
@@ -826,7 +826,7 @@ export default function Home({ defaultLanguage = "en" }: { defaultLanguage?: Lan
 
         <section className="relative isolate overflow-hidden bg-[#0c2630] py-28 text-white sm:py-36">
           <img
-            src="/manus-storage/rio-grande-editorial_2e0661fc.jpg"
+            src="/media/rio-grande-editorial_2e0661fc.jpg"
             alt="Editorial landscape of the Rio Grande near Laredo"
             className="absolute inset-0 h-full w-full object-cover"
           />

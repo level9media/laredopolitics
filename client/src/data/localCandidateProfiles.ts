@@ -72,9 +72,9 @@ const sharedQuestions: CandidateQuestion[] = [
 ];
 
 const localPortraits: Record<string, { url: string; credit: string }> = {
-  "David Tyler King": { url: "/manus-storage/tyler_c05afb18.webp", credit: "Dr. Tyler King campaign website" },
-  "Ubaldo Granados, Jr.": { url: "/manus-storage/baldo_2faa7d37.webp", credit: "Baldo Granados campaign website" },
-  "Nathan Henry Chu": { url: "/manus-storage/nathan_40767aa7.webp", credit: "Nathan Chu 4 Judge Linktree" },
+  "David Tyler King": { url: "/media/tyler_c05afb18.webp", credit: "Dr. Tyler King campaign website" },
+  "Ubaldo Granados, Jr.": { url: "/media/baldo_2faa7d37.webp", credit: "Baldo Granados campaign website" },
+  "Nathan Henry Chu": { url: "/media/nathan_40767aa7.webp", credit: "Nathan Chu 4 Judge Linktree" },
 };
 
 function roleQuestion(raceSlug: string): CandidateQuestion {
