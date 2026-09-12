@@ -36,10 +36,15 @@ const copy = {
     application: "Open ballot application",
     source: "Open City candidate table",
     campaignSite: "Candidate campaign site",
+    campaignMaterials: "Campaign-provided materials",
+    campaignMaterialNote:
+      "Displayed as supplied by the campaign. Appearance here does not constitute an endorsement by Laredo Politics.",
+    viewCampaignSite: "Visit official campaign site",
     verified: "What is verified",
     candidateVoice: "In the candidate’s own words",
     candidateStatementPublished: "Candidate statement published",
     questionnairePublished: "Authorized questionnaire published",
+    candidateResponsesPublished: "Candidate responses published",
     submittedByCampaign: "Submitted directly by the candidate",
     received: "Received",
     candidateStatementNote:
@@ -88,10 +93,15 @@ const copy = {
     application: "Abrir solicitud para la boleta",
     source: "Abrir tabla municipal de candidatos",
     campaignSite: "Sitio oficial de campaña",
+    campaignMaterials: "Materiales proporcionados por la campaña",
+    campaignMaterialNote:
+      "Se muestran tal como fueron proporcionados por la campaña. Su aparición aquí no constituye un respaldo de Laredo Politics.",
+    viewCampaignSite: "Visitar sitio oficial de campaña",
     verified: "Lo que está verificado",
     candidateVoice: "En palabras de la candidata",
     candidateStatementPublished: "Declaración de la candidata publicada",
     questionnairePublished: "Cuestionario autorizado publicado",
+    candidateResponsesPublished: "Respuestas de la candidata publicadas",
     submittedByCampaign: "Enviada directamente por la candidata",
     received: "Recibida",
     candidateStatementNote:
@@ -200,6 +210,9 @@ export default function LocalCandidateProfilePage({
     ...(candidate.portraitUrl
       ? { image: `${SITE_URL}${candidate.portraitUrl}` }
       : {}),
+    ...(candidate.candidateWebsite
+      ? { sameAs: [candidate.candidateWebsite] }
+      : {}),
   };
 
   return (
@@ -239,7 +252,9 @@ export default function LocalCandidateProfilePage({
               </span>
               <span className="border border-white/20 px-3 py-2">
                 {candidate.questionnaireResponse
-                  ? t.questionnairePublished
+                  ? candidate.questionnaireResponse.authorizationCertified
+                    ? t.questionnairePublished
+                    : t.candidateResponsesPublished
                   : candidate.candidateSubmission
                     ? t.candidateStatementPublished
                     : t.noResponse}
@@ -359,6 +374,49 @@ export default function LocalCandidateProfilePage({
                   )}
                 </div>
               </section>
+
+              {candidate.campaignMaterials?.map(material => (
+                <section key={material.imageUrl}>
+                  <div className="flex flex-col gap-5 border border-[#102b36]/14 bg-[#fbf8f1] p-5 sm:p-7">
+                    <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
+                      <div>
+                        <p className="section-kicker">{t.campaignMaterials}</p>
+                        <h2 className="mt-4 font-display text-4xl font-black leading-none tracking-[-0.04em] sm:text-5xl">
+                          {material.title[language]}
+                        </h2>
+                      </div>
+                      <p className="max-w-xs text-xs leading-5 text-[#526568] sm:text-right">
+                        {t.campaignMaterialNote}
+                      </p>
+                    </div>
+                    <figure>
+                      <img
+                        src={material.imageUrl}
+                        alt={material.alt[language]}
+                        className="w-full border border-[#102b36]/12 object-cover"
+                        loading="eager"
+                      />
+                      <figcaption className="mt-3 flex flex-col gap-3 border-l-2 border-[#e75037] pl-4 text-[10px] leading-5 text-[#526568] sm:flex-row sm:items-center sm:justify-between">
+                        <span>
+                          {material.credit[language]} {t.received}:{" "}
+                          {material.receivedAt[language]}.
+                        </span>
+                        {material.sourceUrl && (
+                          <a
+                            href={material.sourceUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex shrink-0 items-center gap-2 font-black uppercase tracking-[0.1em] text-[#e75037]"
+                          >
+                            {t.viewCampaignSite}
+                            <ArrowUpRight className="h-3.5 w-3.5" />
+                          </a>
+                        )}
+                      </figcaption>
+                    </figure>
+                  </div>
+                </section>
+              ))}
 
               <section>
                 <p className="section-kicker">{t.verified}</p>
