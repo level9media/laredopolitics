@@ -26,3 +26,7 @@ The optimized Alyssa Cigarroa and JD Gonzalez WebP crops were also visually veri
 The campaign-provided portrait was converted to a 960 × 720 WebP profile crop that preserves Dr. Tyler King’s complete face, glasses, shoulders, blue suit, and orange tie against the neutral background. The supplied 4 × 8 campaign signage was converted to a 1600 × 800 WebP without changing its 2:1 composition. All wording, campaign colors, candidate image, “Fighting for Results” message, and paid-political-ad disclosure remain intact. The campaign-controlled site `https://www.tylerkinglaredo.com` was independently opened and verified as a re-election site for Dr. Tyler King.
 
 A direct inspection of both generated outputs reconfirmed that the headshot preserves the intended 4:3 composition and that the signage retains all text, artwork, campaign colors, and its original paid-political-ad disclosure without clipping.
+
+## Clarissa “Claire” Cardenas official headshot — September 12, 2026
+
+The campaign-provided 1638 × 2048 portrait was cropped non-destructively to the profile system’s 4:3 frame and optimized as a 960 × 720 WebP of approximately 24 KB. Direct inspection of the generated output confirmed that it preserves Cardenas’s complete face, hair, shoulders, crossed-arm pose, blue suit, and neutral black background without distortion. The user-provided original remains unchanged outside the project.
