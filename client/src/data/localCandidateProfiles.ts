@@ -24,6 +24,15 @@ export type CandidateQuestionnaireResponse = {
   answers: Record<string, { en: string; es: string }>;
 };
 
+export type CandidateCampaignMaterial = {
+  imageUrl: string;
+  title: { en: string; es: string };
+  alt: { en: string; es: string };
+  credit: { en: string; es: string };
+  receivedAt: { en: string; es: string };
+  sourceUrl?: string;
+};
+
 export type LocalCandidateProfile = {
   slug: string;
   raceSlug: string;
@@ -47,6 +56,7 @@ export type LocalCandidateProfile = {
   portraitUrl?: string;
   portraitCredit?: string;
   candidateWebsite?: string;
+  campaignMaterials?: CandidateCampaignMaterial[];
   candidateSubmission?: CandidateSubmission;
   questionnaireResponse?: CandidateQuestionnaireResponse;
   questions: CandidateQuestion[];
@@ -126,9 +136,18 @@ const sharedQuestions: CandidateQuestion[] = [
 ];
 
 const localPortraits: Record<string, { url: string; credit: string }> = {
+  "Michelle Marie Winterroth": {
+    url: "/media/michelle-mimi-winterroth-official-headshot_2026.webp",
+    credit: "Official headshot provided by Michelle “Mimi” Winterroth",
+  },
+  "Clarissa Yvette Cardenas": {
+    url: "/media/clarissa-claire-cardenas-official-headshot_2026.webp",
+    credit:
+      "Official headshot provided by the Clarissa “Claire” Cardenas campaign",
+  },
   "David Tyler King": {
-    url: "/media/tyler_c05afb18.webp",
-    credit: "Dr. Tyler King campaign website",
+    url: "/media/dr-tyler-king-official-headshot_2026.webp",
+    credit: "Official headshot provided by the Dr. Tyler King campaign",
   },
   "Ubaldo Granados, Jr.": {
     url: "/media/baldo_2faa7d37.webp",
@@ -139,6 +158,36 @@ const localPortraits: Record<string, { url: string; credit: string }> = {
     credit: "Nathan Chu 4 Judge Linktree",
   },
 };
+
+const candidateWebsiteOverrides: Record<string, string> = {
+  "David Tyler King": "https://www.tylerkinglaredo.com",
+};
+
+const candidateCampaignMaterials: Record<string, CandidateCampaignMaterial[]> =
+  {
+    "David Tyler King": [
+      {
+        imageUrl: "/media/dr-tyler-king-campaign-signage_2026.webp",
+        title: {
+          en: "Official re-election campaign graphic",
+          es: "Gráfico oficial de la campaña de reelección",
+        },
+        alt: {
+          en: "Re-elect Dr. Tyler King for Laredo City Council District 6 — Fighting for Results campaign graphic",
+          es: "Gráfico de campaña para reelegir al Dr. Tyler King al Concejo Municipal de Laredo por el Distrito 6 — Fighting for Results",
+        },
+        credit: {
+          en: "Provided directly by the Dr. Tyler King campaign. Paid political advertising disclosure appears in the original artwork.",
+          es: "Proporcionado directamente por la campaña del Dr. Tyler King. El aviso de publicidad política pagada aparece en el arte original.",
+        },
+        receivedAt: {
+          en: "September 10, 2026",
+          es: "10 de septiembre de 2026",
+        },
+        sourceUrl: "https://www.tylerkinglaredo.com",
+      },
+    ],
+  };
 
 const candidateSubmissions: Record<string, CandidateSubmission> = {
   "Michelle Marie Winterroth": {
@@ -233,6 +282,32 @@ const questionnaireResponses: Record<string, CandidateQuestionnaireResponse> = {
       },
     },
   },
+  "Clarissa Yvette Cardenas": {
+    receivedAt: {
+      en: "September 12, 2026",
+      es: "12 de septiembre de 2026",
+    },
+    respondentName: "Clarissa “Claire” Cardenas",
+    campaignRole: {
+      en: "Candidate for Laredo City Council District 3",
+      es: "Candidata al Concejo Municipal de Laredo por el Distrito 3",
+    },
+    authorizationCertified: false,
+    answers: {
+      priorities: {
+        en: "My three highest priorities are infrastructure and basic services, responsible economic development, and communication and accessibility.\n\nFor infrastructure, I want to start with the everyday issues residents actually see: streets, drainage, sidewalks, parks, maintenance and water reliability. I would work with the appropriate City departments to identify District 3’s highest-priority projects, determine what is already funded and establish realistic timelines instead of making promises before knowing the actual cost.\n\nFor economic development, I want growth that benefits Laredo residents. When projects come before Council, I want to know how many permanent jobs they create, whether those jobs can be filled locally, what incentives are being requested, and what impact the project will have on our infrastructure and resources.\n\nAnd accessibility is something I can begin immediately. Residents shouldn’t have to chase their councilmember to get an answer.",
+        es: "Mis tres prioridades principales son la infraestructura y los servicios básicos, el desarrollo económico responsable, y la comunicación y accesibilidad.\n\nEn cuanto a la infraestructura, quiero comenzar con los problemas cotidianos que los residentes realmente ven: calles, drenaje, banquetas, parques, mantenimiento y confiabilidad del agua. Trabajaría con los departamentos correspondientes de la Ciudad para identificar los proyectos de mayor prioridad del Distrito 3, determinar qué ya está financiado y establecer plazos realistas en lugar de hacer promesas antes de conocer el costo real.\n\nEn cuanto al desarrollo económico, quiero un crecimiento que beneficie a los residentes de Laredo. Cuando se presenten proyectos ante el Concejo, quiero saber cuántos empleos permanentes crearán, si esos empleos pueden cubrirse localmente, qué incentivos se solicitan y qué impacto tendrá el proyecto en nuestra infraestructura y recursos.\n\nY la accesibilidad es algo que puedo comenzar de inmediato. Los residentes no deberían tener que perseguir a su representante del Concejo para obtener una respuesta.",
+      },
+      "record-followup-3": {
+        en: "Accessibility isn’t just something I put on a campaign flyer. It’s one of the main reasons I’m running.\n\nResidents should be able to contact me by phone, email, social media and in person, and I want regular opportunities for residents to speak with me directly through district meetings.\n\nI also want concerns tracked. If someone reports a pothole, drainage problem or another City issue, they shouldn’t have to start from zero every time they call.\n\nI would establish a standard that constituent contacts are acknowledged within two business days, even when the problem itself cannot be resolved that quickly. An acknowledgment isn’t necessarily a solution, but residents deserve to know their concern was received, where it was referred and what happens next.\n\nAnd if something takes time, communicate that. Silence is what frustrates people.",
+        es: "La accesibilidad no es solo algo que pongo en un volante de campaña. Es una de las principales razones por las que soy candidata.\n\nLos residentes deberían poder comunicarse conmigo por teléfono, correo electrónico, redes sociales y en persona, y quiero oportunidades regulares para que hablen directamente conmigo mediante reuniones del distrito.\n\nTambién quiero que se dé seguimiento a las inquietudes. Si alguien reporta un bache, un problema de drenaje u otro asunto de la Ciudad, no debería tener que empezar desde cero cada vez que llama.\n\nEstablecería como norma que los contactos de los constituyentes reciban un acuse de recibo dentro de dos días hábiles, incluso cuando el problema no pueda resolverse con esa rapidez. Un acuse de recibo no es necesariamente una solución, pero los residentes merecen saber que su inquietud fue recibida, a dónde se remitió y qué sucede después.\n\nY si algo toma tiempo, hay que comunicarlo. El silencio es lo que frustra a la gente.",
+      },
+      "record-followup-4": {
+        en: "My business education taught me about budgeting, management, planning, accountability and making decisions with limited resources. My professional experience has strengthened those skills.\n\nI would apply that first by treating District 3’s needs like priorities that have to be identified, organized, funded, tracked and measured.\n\nIt’s not enough for me to say, “I’m going to fix the streets.” Which streets? What’s wrong with them? Which department is responsible? What’s the estimated cost? Is funding available? What’s the timeline? And did we actually complete it?",
+        es: "Mi formación empresarial me enseñó sobre presupuestos, administración, planificación, rendición de cuentas y toma de decisiones con recursos limitados. Mi experiencia profesional ha fortalecido esas habilidades.\n\nAplicaría eso primero tratando las necesidades del Distrito 3 como prioridades que deben identificarse, organizarse, financiarse, darles seguimiento y medirse.\n\nNo basta con que yo diga: “Voy a arreglar las calles”. ¿Cuáles calles? ¿Qué problemas tienen? ¿Qué departamento es responsable? ¿Cuál es el costo estimado? ¿Hay fondos disponibles? ¿Cuál es el plazo? ¿Y realmente lo completamos?",
+      },
+    },
+  },
 };
 
 function roleQuestion(raceSlug: string): CandidateQuestion {
@@ -318,7 +393,11 @@ export const localCandidateProfiles: LocalCandidateProfile[] =
           : ("official-record-only" as const),
         portraitUrl: portrait?.url,
         portraitCredit: portrait?.credit,
-        candidateWebsite: research?.candidateWebsite || undefined,
+        candidateWebsite:
+          candidateWebsiteOverrides[candidate.fullName] ||
+          research?.candidateWebsite ||
+          undefined,
+        campaignMaterials: candidateCampaignMaterials[candidate.fullName],
         candidateSubmission: candidateSubmissions[candidate.fullName],
         questionnaireResponse: questionnaireResponses[candidate.fullName],
         questions: [
